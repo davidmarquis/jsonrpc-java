@@ -1,0 +1,1 @@
+{"jsonrpc": "2.0", "method": "someMethod", "params": {"param1": 1, "param2": "2", "param3": {"attribute": "value"}}}
