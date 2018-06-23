@@ -23,7 +23,7 @@ public class InvokeByReflectionTest {
         InvokeByReflection handler = new InvokeByReflection(MyService.class, new MyServiceImpl());
 
         Result result = handler.handle(Invocation.of("singleStringParameter")
-                                                 .withParameter("hello world"));
+                                                 .withParameter(new Param(Value.of("hello world"))));
 
         assertThat(result, hasValue(equalTo("hello world")));
     }

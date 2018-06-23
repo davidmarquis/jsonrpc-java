@@ -1,5 +1,7 @@
 package ca.radiant3.jsonrpc.protocol.serialization;
 
+import ca.radiant3.jsonrpc.Invocation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +35,15 @@ public class InvocationJson {
 
     public List<ParameterJson> getParams() {
         return params;
+    }
+
+    public Invocation toInvocation() {
+        Invocation invocation = new Invocation(method);
+
+        params.stream()
+              .map(ParameterJson::toParam)
+              .forEach(invocation::withParameter);
+        
+        return invocation;
     }
 }

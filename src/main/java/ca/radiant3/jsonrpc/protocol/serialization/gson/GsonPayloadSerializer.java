@@ -1,18 +1,20 @@
 package ca.radiant3.jsonrpc.protocol.serialization.gson;
 
+import ca.radiant3.jsonrpc.Result;
 import ca.radiant3.jsonrpc.Value;
 import ca.radiant3.jsonrpc.protocol.serialization.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.Map;
 
 public class GsonPayloadSerializer implements PayloadSerializer {
-    private Gson gson = new Gson();
+    private Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Result.class, new ResultTypeAdapter())
+            .create();
 
 
     @Override
@@ -30,7 +32,6 @@ public class GsonPayloadSerializer implements PayloadSerializer {
         OutputStreamWriter writer = new OutputStreamWriter(out);
         gson.toJson(response, writer);
         writer.flush();
-        gson = gson;
     }
 
     @Override
@@ -77,6 +78,22 @@ public class GsonPayloadSerializer implements PayloadSerializer {
         @Override
         public Object readAs(Type type) {
             return gson.fromJson(element, type);
+        }
+    }
+
+    private class ResultTypeAdapter extends TypeAdapter<Result> {
+        @Override
+        public void write(JsonWriter out, Result result) throws IOException {
+            if (result != null) {
+                gson.toJson(result.getValue(), result.getHint(), out);
+            } else {
+                out.nullValue();
+            }
+        }
+
+        @Override
+        public Result read(JsonReader in) throws IOException {
+            return null;
         }
     }
 }

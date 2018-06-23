@@ -14,15 +14,23 @@ public class JsonRpc2ExceptionsMapperTest {
     public void methodNotFound() {
         ErrorJson error = mapper.toError(new NoSuchMethodException("methodName"));
 
-        assertThat(error.code(), is(-32601));
-        assertThat(error.message(), is("Method not found"));
+        assertThat(error.getCode(), is(-32601));
+        assertThat(error.getMessage(), is("Method not found"));
+    }
+
+    @Test
+    public void invalidProtocol() {
+        ErrorJson error = mapper.toError(new InvalidProtocolVersion("1.0"));
+
+        assertThat(error.getCode(), is(-32600));
+        assertThat(error.getMessage(), is("Invalid protocol"));
     }
 
     @Test
     public void invalidParams() {
         ErrorJson error = mapper.toError(new IllegalArgumentException());
 
-        assertThat(error.code(), is(-32602 ));
-        assertThat(error.message(), is("Invalid params"));
+        assertThat(error.getCode(), is(-32602 ));
+        assertThat(error.getMessage(), is("Invalid params"));
     }
 }

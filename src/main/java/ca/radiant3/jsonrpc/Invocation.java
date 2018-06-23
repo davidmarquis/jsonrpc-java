@@ -18,8 +18,8 @@ public class Invocation {
         return methodName;
     }
 
-    public Invocation withParameter(Object parameter) {
-        parameters.addParameter(new Param(Value.of(parameter)));
+    public Invocation withParameter(Param param) {
+        parameters.addParameter(param);
         return this;
     }
 

@@ -1,7 +1,7 @@
-package ca.radiant3.jsonrpc.protocol.serialization.gson;
+package ca.radiant3.jsonrpc.protocol.serialization;
 
-import ca.radiant3.jsonrpc.protocol.serialization.InvocationJson;
-import ca.radiant3.jsonrpc.protocol.serialization.PayloadSerializer;
+import ca.radiant3.jsonrpc.protocol.serialization.gson.GsonPayloadSerializer;
+import ca.radiant3.jsonrpc.testkit.OptionalMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -11,13 +11,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import static ca.radiant3.jsonrpc.testkit.OptionalMatchers.isPresentAnd;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
-public class InvocationSerializerAcceptanceTest {
+public class DeserializationTest {
 
     @Parameterized.Parameters
     public static Collection<Object> implementations() {
@@ -44,8 +45,8 @@ public class InvocationSerializerAcceptanceTest {
                 example("/examples/notification-params-array.json"));
 
         assertThat(invocation.getParams(), hasSize(3));
-        assertThat(invocation.getParams(), everyItem(hasProperty("name", nullValue())));
-
+        assertThat(invocation.getParams(), everyItem(hasProperty("name", OptionalMatchers.empty())));
+                                                                               
         assertThat(invocation.getParams().get(0).getValue().readAs(Integer.class), equalTo(1));
         assertThat(invocation.getParams().get(1).getValue().readAs(String.class), is("2"));
         assertThat(invocation.getParams().get(2).getValue().readAs(DummyParam.class), is(new DummyParam("value")));
@@ -58,11 +59,11 @@ public class InvocationSerializerAcceptanceTest {
 
         assertThat(invocation.getParams(), hasSize(3));
 
-        assertThat(invocation.getParams().get(0).getName(), equalTo("param1"));
+        assertThat(invocation.getParams().get(0).getName(), isPresentAnd(equalTo("param1")));
         assertThat(invocation.getParams().get(0).getValue().readAs(Integer.class), equalTo(1));
-        assertThat(invocation.getParams().get(1).getName(), equalTo("param2"));
+        assertThat(invocation.getParams().get(1).getName(), isPresentAnd(equalTo("param2")));
         assertThat(invocation.getParams().get(1).getValue().readAs(String.class), is("2"));
-        assertThat(invocation.getParams().get(2).getName(), equalTo("param3"));
+        assertThat(invocation.getParams().get(2).getName(), isPresentAnd(equalTo("param3"))   );
         assertThat(invocation.getParams().get(2).getValue().readAs(DummyParam.class), is(new DummyParam("value")));
     }
 

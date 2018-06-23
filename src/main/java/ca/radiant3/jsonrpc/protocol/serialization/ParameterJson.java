@@ -1,5 +1,6 @@
 package ca.radiant3.jsonrpc.protocol.serialization;
 
+import ca.radiant3.jsonrpc.Param;
 import ca.radiant3.jsonrpc.Value;
 
 import java.util.Optional;
@@ -23,5 +24,9 @@ public class ParameterJson {
 
     public Value getValue() {
         return value;
+    }
+
+    public Param toParam() {
+        return new Param(value);
     }
 }

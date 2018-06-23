@@ -4,9 +4,12 @@ public class ErrorJson {
     private int code;
     private String message;
 
-    public ErrorJson withCode(int code) {
+    private ErrorJson(int code) {
         this.code = code;
-        return this;
+    }
+
+    public static ErrorJson of(int code) {
+        return new ErrorJson(code);
     }
 
     public ErrorJson withMessage(String message) {
@@ -14,11 +17,11 @@ public class ErrorJson {
         return this;
     }
 
-    public int code() {
+    public int getCode() {
         return code;
     }
 
-    public String message() {
+    public String getMessage() {
         return message;
     }
 }
