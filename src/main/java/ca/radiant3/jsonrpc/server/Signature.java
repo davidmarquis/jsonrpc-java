@@ -2,6 +2,7 @@ package ca.radiant3.jsonrpc.server;
 
 import ca.radiant3.jsonrpc.Invocation;
 import ca.radiant3.jsonrpc.Param;
+import ca.radiant3.jsonrpc.Parameters;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -52,10 +53,12 @@ public class Signature {
     }
 
     private Object[] toArgs(Method method, Invocation invocation) {
-        List<Param> parameters = invocation.getParameters();
+        Parameters parameters = invocation.getParameters();
         List<Object> result = new ArrayList<>();
-        for (int i = 0; i < parameters.size(); i++) {
-            Param parameter = parameters.get(i);
+
+        List<Param> parameterList = parameters.list();
+        for (int i = 0; i < parameterList.size(); i++) {
+            Param parameter = parameterList.get(i);
             Parameter param = method.getParameters()[i];
             result.add(parameter.getValue().readAs(param.getType()));
         }

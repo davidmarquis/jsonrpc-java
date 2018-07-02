@@ -1,13 +1,13 @@
 package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
 import ca.radiant3.jsonrpc.Invocation;
-import ca.radiant3.jsonrpc.InvocationHandler;
-import ca.radiant3.jsonrpc.Result;
+import ca.radiant3.jsonrpc.Value;
 import ca.radiant3.jsonrpc.protocol.InvocationPayload;
 import ca.radiant3.jsonrpc.protocol.ResponsePayload;
 import ca.radiant3.jsonrpc.protocol.serialization.InvocationJson;
 import ca.radiant3.jsonrpc.protocol.serialization.PayloadSerializer;
 import ca.radiant3.jsonrpc.protocol.serialization.ResponseJson;
+import ca.radiant3.jsonrpc.server.InvocationHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -47,7 +47,7 @@ public class JsonRpc2Protocol {
             Invocation invocation = json.toInvocation();
             validateVersion(json);
 
-            Result result = handler.handle(invocation);
+            Value result = handler.handle(invocation);
             return response.success(result);
         } catch (Exception e) {
             return response.error(exceptionMapper.toError(e));
@@ -55,8 +55,8 @@ public class JsonRpc2Protocol {
     }
 
     private void validateVersion(InvocationJson json) {
-        if (!"2.0".equals(json.getJsonRpc())) {
-            throw new InvalidProtocolVersion(json.getJsonRpc());
+        if (!"2.0".equals(json.getJsonrpc())) {
+            throw new InvalidProtocolVersion(json.getJsonrpc());
         }
     }
 

@@ -1,14 +1,12 @@
 package ca.radiant3.jsonrpc.protocol.serialization;
 
 import ca.radiant3.jsonrpc.Invocation;
-
-import java.util.ArrayList;
-import java.util.List;
+import ca.radiant3.jsonrpc.Value;
 
 public class InvocationJson {
     private String jsonrpc;
     private String method;
-    private List<ParameterJson> params = new ArrayList<>();
+    private ParametersJson params = ParametersJson.none();
 
     public InvocationJson withJsonrpc(String jsonrpc) {
         this.jsonrpc = jsonrpc;
@@ -20,12 +18,17 @@ public class InvocationJson {
         return this;
     }
 
-    public InvocationJson addParameter(ParameterJson param) {
-        this.params.add(param);
+    public InvocationJson withParameters(ParametersJson params) {
+        this.params = params;
         return this;
     }
 
-    public String getJsonRpc() {
+    public InvocationJson withParameters(Value... values) {
+        this.params = ParametersJson.of(values);
+        return this;
+    }
+
+    public String getJsonrpc() {
         return jsonrpc;
     }
 
@@ -33,17 +36,19 @@ public class InvocationJson {
         return method;
     }
 
-    public List<ParameterJson> getParams() {
+    public ParametersJson getParams() {
         return params;
     }
 
     public Invocation toInvocation() {
         Invocation invocation = new Invocation(method);
 
-        params.stream()
-              .map(ParameterJson::toParam)
-              .forEach(invocation::withParameter);
-        
+        params.addTo(invocation.getParameters());
+
         return invocation;
+    }
+
+    public boolean hasParameters() {
+        return params.count() > 0;
     }
 }

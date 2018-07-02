@@ -6,11 +6,11 @@ import java.io.OutputStream;
 
 public interface PayloadSerializer {
 
-    void serialize(InvocationJson invocation, OutputStream out);
+    void serialize(InvocationJson invocation, OutputStream out) throws IOException;
     void serialize(BatchJson batch, OutputStream out);
     void serialize(ResponseJson response, OutputStream out) throws IOException;
 
     InvocationJson readInvocation(InputStream json);
-
-    BatchJson deserializeBatch(InputStream json);
+    ResponseJson readResponse(InputStream json);
+    BatchJson readBatch(InputStream json);
 }

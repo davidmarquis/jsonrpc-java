@@ -1,7 +1,7 @@
 package ca.radiant3.jsonrpc.transport.simpleframework;
 
+import ca.radiant3.jsonrpc.RpcService;
 import ca.radiant3.jsonrpc.protocol.InvocationPayload;
-import ca.radiant3.jsonrpc.protocol.RpcService;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.core.Container;

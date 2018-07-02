@@ -1,7 +1,5 @@
 package ca.radiant3.jsonrpc;
 
-import java.util.Optional;
-
 public class Param {
     private final Value value;
     private String name;
@@ -19,7 +17,7 @@ public class Param {
         return value;
     }
 
-    public Optional<String> getName() {
-        return Optional.ofNullable(name);
+    public String getName() {
+        return name;
     }
 }

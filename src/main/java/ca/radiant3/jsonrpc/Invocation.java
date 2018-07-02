@@ -1,7 +1,5 @@
 package ca.radiant3.jsonrpc;
 
-import java.util.List;
-
 public class Invocation {
     private String methodName;
     private Parameters parameters = new Parameters();
@@ -23,7 +21,7 @@ public class Invocation {
         return this;
     }
 
-    public List<Param> getParameters() {
-        return parameters.getParameters();
+    public Parameters getParameters() {
+        return parameters;
     }
 }

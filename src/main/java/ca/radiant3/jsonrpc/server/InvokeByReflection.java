@@ -1,8 +1,7 @@
 package ca.radiant3.jsonrpc.server;
 
 import ca.radiant3.jsonrpc.Invocation;
-import ca.radiant3.jsonrpc.InvocationHandler;
-import ca.radiant3.jsonrpc.Result;
+import ca.radiant3.jsonrpc.Value;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,9 +25,9 @@ public class InvokeByReflection implements InvocationHandler {
     }
 
     @Override
-    public Result handle(Invocation invocation) throws Exception {
+    public Value handle(Invocation invocation) throws Exception {
         Signature method = resolveMethod(invocation);
-        return Result.of(method.invoke(target, invocation), method.getReturnType());
+        return Value.of(method.invoke(target, invocation), method.getReturnType());
     }
 
     private Signature resolveMethod(Invocation invocation) throws NoSuchMethodException {

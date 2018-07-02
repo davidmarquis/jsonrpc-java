@@ -1,26 +1,26 @@
 package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
 import ca.radiant3.jsonrpc.Invocation;
-import ca.radiant3.jsonrpc.InvocationHandler;
-import ca.radiant3.jsonrpc.Result;
+import ca.radiant3.jsonrpc.Value;
+import ca.radiant3.jsonrpc.server.InvocationHandler;
 
 public class StubInvocationHandler implements InvocationHandler {
-    private Result result;
-    private Exception thrown;
+    private Value returnValue;
+    private Exception toThrow;
 
-    public void responds(Result response) {
-        this.result = response;
+    public void returns(Value response) {
+        this.returnValue = response;
     }
 
     public void throwing(Exception exception) {
-        this.thrown = exception;
+        this.toThrow = exception;
     }
 
     @Override
-    public Result handle(Invocation invocation) throws Exception {
-        if (thrown != null) {
-            throw thrown;
+    public Value handle(Invocation invocation) throws Exception {
+        if (toThrow != null) {
+            throw toThrow;
         }
-        return result;
+        return returnValue;
     }
 }

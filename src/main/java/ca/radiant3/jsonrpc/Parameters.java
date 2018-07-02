@@ -11,7 +11,7 @@ public class Parameters {
         parameters.add(parameter);
     }
 
-    public List<Param> getParameters() {
+    public List<Param> list() {
         return Collections.unmodifiableList(parameters);
     }
 }

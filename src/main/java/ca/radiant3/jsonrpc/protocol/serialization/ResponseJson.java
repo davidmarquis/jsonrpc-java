@@ -1,33 +1,45 @@
 package ca.radiant3.jsonrpc.protocol.serialization;
 
-import ca.radiant3.jsonrpc.Result;
+import ca.radiant3.jsonrpc.Value;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 public class ResponseJson {
-    private final String jsonrpc = "2.0";
-    private final Serializable id;
-    private Result result;
+    public static final String V2 = "2.0";
+
+    private String jsonrpc = "2.0";
+    private Serializable id;
+    private Value result;
     private ErrorJson error;
 
-    private ResponseJson(String id) {
-        this.id = id;
+    private ResponseJson(String version) {
+        this.jsonrpc = version;
     }
 
-    public static ResponseJson toInvocation(String id) {
-        return new ResponseJson(id);
+    public static ResponseJson version(String version) {
+        return new ResponseJson(version);
     }
 
     public static ResponseJson toNotification() {
-        return new ResponseJson(null);
+        return to((String) null);
     }
 
     public static ResponseJson unboundError(ErrorJson details) {
         return toNotification().error(details);
     }
 
+    public static ResponseJson to(Serializable id) {
+        return ResponseJson.version(V2).withId(id);
+    }
+
     public static ResponseJson to(InvocationJson invocation) {
-        return toInvocation(null);
+        return to((String) null);
+    }
+
+    public ResponseJson withId(Serializable id) {
+        this.id = id;
+        return this;
     }
 
     public ResponseJson error(ErrorJson details) {
@@ -35,16 +47,29 @@ public class ResponseJson {
         return this;
     }
 
-    public ResponseJson success(Result result) {
+    public ResponseJson success(Value result) {
         this.result = result;
         return this;
     }
 
-    public Result getResult() {
+    public Value getResult() {
         return result;
     }
 
     public ErrorJson getError() {
         return error;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T as(Class<T> type) {
+        return (T) Optional.ofNullable(result).map(value -> value.readAs(type)).orElse(null);
+    }
+
+    public Serializable getId() {
+        return id;
+    }
+
+    public String getJsonrpc() {
+        return jsonrpc;
     }
 }

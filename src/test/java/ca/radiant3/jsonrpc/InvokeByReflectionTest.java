@@ -3,8 +3,7 @@ package ca.radiant3.jsonrpc;
 import ca.radiant3.jsonrpc.server.InvokeByReflection;
 import org.junit.Test;
 
-import static ca.radiant3.jsonrpc.testkit.ResultThat.hasValue;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static ca.radiant3.jsonrpc.testkit.ValueThat.readsAsString;
 import static org.junit.Assert.assertThat;
 
 public class InvokeByReflectionTest {
@@ -13,19 +12,19 @@ public class InvokeByReflectionTest {
     public void withoutParameter() throws Exception {
         InvokeByReflection handler = new InvokeByReflection(MyService.class, new MyServiceImpl());
 
-        Result result = handler.handle(Invocation.of("noParameter"));
+        Value result = handler.handle(Invocation.of("noParameter"));
 
-        assertThat(result, hasValue(equalTo("some value")));
+        assertThat(result, readsAsString("some value"));
     }
 
     @Test
     public void singleParameter() throws Exception {
         InvokeByReflection handler = new InvokeByReflection(MyService.class, new MyServiceImpl());
 
-        Result result = handler.handle(Invocation.of("singleStringParameter")
+        Value result = handler.handle(Invocation.of("singleStringParameter")
                                                  .withParameter(new Param(Value.of("hello world"))));
 
-        assertThat(result, hasValue(equalTo("hello world")));
+        assertThat(result, readsAsString("hello world"));
     }
 
     public interface MyService {
