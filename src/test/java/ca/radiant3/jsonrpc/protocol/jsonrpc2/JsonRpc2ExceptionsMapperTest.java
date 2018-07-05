@@ -1,6 +1,7 @@
 package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
-import ca.radiant3.jsonrpc.protocol.serialization.ErrorJson;
+import ca.radiant3.jsonrpc.json.ErrorJson;
+import ca.radiant3.jsonrpc.protocol.InvalidProtocolVersion;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -30,7 +31,7 @@ public class JsonRpc2ExceptionsMapperTest {
     public void invalidParams() {
         ErrorJson error = mapper.toError(new IllegalArgumentException());
 
-        assertThat(error.getCode(), is(-32602 ));
+        assertThat(error.getCode(), is(-32602));
         assertThat(error.getMessage(), is("Invalid params"));
     }
 }

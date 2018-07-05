@@ -2,11 +2,10 @@ package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
 import ca.radiant3.jsonrpc.Invocation;
 import ca.radiant3.jsonrpc.Value;
-import ca.radiant3.jsonrpc.protocol.InvocationPayload;
-import ca.radiant3.jsonrpc.protocol.ResponsePayload;
-import ca.radiant3.jsonrpc.protocol.serialization.InvocationJson;
+import ca.radiant3.jsonrpc.json.InvocationJson;
+import ca.radiant3.jsonrpc.json.ResponseJson;
+import ca.radiant3.jsonrpc.protocol.*;
 import ca.radiant3.jsonrpc.protocol.serialization.PayloadSerializer;
-import ca.radiant3.jsonrpc.protocol.serialization.ResponseJson;
 import ca.radiant3.jsonrpc.server.InvocationHandler;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class JsonRpc2Protocol {
         ResponseJson response;
         try {
             if (!MIME_TYPE.equals(payload.mimeType())) {
-                response = ResponseJson.unboundError(Errors.invalidMimeType());
+                response = ResponseJson.unboundError(Errors.invalidMimeType(payload.mimeType()));
             } else {
                 InvocationJson json = serializer.readInvocation(payload.inputStream());
                 response = invoke(json);

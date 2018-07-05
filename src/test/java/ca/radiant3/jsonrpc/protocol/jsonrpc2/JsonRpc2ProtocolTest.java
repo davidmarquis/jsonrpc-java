@@ -2,14 +2,13 @@ package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
 import ca.radiant3.jsonrpc.Example;
 import ca.radiant3.jsonrpc.Value;
+import ca.radiant3.jsonrpc.json.ResponseJson;
+import ca.radiant3.jsonrpc.protocol.Errors;
 import ca.radiant3.jsonrpc.protocol.InvocationPayload;
 import ca.radiant3.jsonrpc.protocol.ResponsePayload;
-import ca.radiant3.jsonrpc.protocol.serialization.ErrorJson;
-import ca.radiant3.jsonrpc.protocol.serialization.ResponseJson;
 import ca.radiant3.jsonrpc.protocol.serialization.gson.GsonPayloadSerializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
@@ -19,10 +18,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 
+import static ca.radiant3.jsonrpc.testkit.ErrorJsonThat.hasSameState;
 import static ca.radiant3.jsonrpc.testkit.ValueThat.isSameValue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -40,7 +39,7 @@ public class JsonRpc2ProtocolTest {
             ResponseJson response = invoke(InvocationPayload.from(null, "application/other"));
 
 
-            assertThat(response.getError(), sameCodeAs(Errors.invalidMimeType()));
+            assertThat(response.getError(), hasSameState(Errors.invalidMimeType("application/other")));
             assertThat(response.getResult(), nullValue());
         }
 
@@ -48,7 +47,7 @@ public class JsonRpc2ProtocolTest {
         public void invalidFormat() {
             ResponseJson response = invoke(Example.get("/examples/invalid/notification-badly-formed.json"));
 
-            assertThat(response.getError(), sameCodeAs(Errors.invalidFormat()));
+            assertThat(response.getError(), hasSameState(Errors.invalidFormat()));
             assertThat(response.getResult(), nullValue());
         }
 
@@ -56,7 +55,7 @@ public class JsonRpc2ProtocolTest {
         public void invalidProtocol() {
             ResponseJson response = invoke(Example.get("/examples/invalid/notification-invalid-protocol.json"));
 
-            assertThat(response.getError(), sameCodeAs(Errors.invalidProtocol()));
+            assertThat(response.getError(), hasSameState(Errors.invalidProtocol("1.0")));
             assertThat(response.getResult(), nullValue());
         }
 
@@ -66,7 +65,7 @@ public class JsonRpc2ProtocolTest {
 
             ResponseJson response = invoke(Example.get("/examples/notification-no-param.json"));
 
-            assertThat(response.getError(), sameCodeAs(Errors.methodNotFound()));
+            assertThat(response.getError(), hasSameState(Errors.methodNotFound()));
             assertThat(response.getResult(), nullValue());
         }
     }
@@ -109,9 +108,5 @@ public class JsonRpc2ProtocolTest {
     private static ResponseJson invoke(InvocationPayload invocation) {
         ResponsePayload response = protocol.invoke(invocation);
         return ((JsonRpc2Protocol.JsonResponsePayload) response).getResponse();
-    }
-
-    private static Matcher<ErrorJson> sameCodeAs(ErrorJson error) {
-        return hasProperty("code", equalTo(error.getCode()));
     }
 }

@@ -2,6 +2,8 @@ package ca.radiant3.jsonrpc.protocol.serialization;
 
 import ca.radiant3.jsonrpc.Example;
 import ca.radiant3.jsonrpc.Value;
+import ca.radiant3.jsonrpc.json.ErrorJson;
+import ca.radiant3.jsonrpc.json.ResponseJson;
 import org.junit.Test;
 
 import java.util.Objects;

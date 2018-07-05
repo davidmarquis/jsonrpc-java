@@ -1,6 +1,7 @@
 package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
 import ca.radiant3.jsonrpc.RpcService;
+import ca.radiant3.jsonrpc.protocol.ExceptionMapper;
 import ca.radiant3.jsonrpc.protocol.InvocationPayload;
 import ca.radiant3.jsonrpc.protocol.ResponsePayload;
 import ca.radiant3.jsonrpc.protocol.serialization.PayloadSerializer;

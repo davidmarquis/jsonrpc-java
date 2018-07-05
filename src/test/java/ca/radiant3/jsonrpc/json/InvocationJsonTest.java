@@ -1,4 +1,4 @@
-package ca.radiant3.jsonrpc.protocol.serialization;
+package ca.radiant3.jsonrpc.json;
 
 import ca.radiant3.jsonrpc.Invocation;
 import ca.radiant3.jsonrpc.Param;
@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
-import static ca.radiant3.jsonrpc.protocol.serialization.ParametersJson.named;
+import static ca.radiant3.jsonrpc.json.ParametersJson.named;
 import static ca.radiant3.jsonrpc.testkit.ParamThat.hasSameState;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
