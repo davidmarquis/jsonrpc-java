@@ -63,7 +63,7 @@ public class ResponseTypeAdapter extends TypeAdapter<ResponseJson> {
                 .ifPresent(response::withId);
 
         Optional.ofNullable(payload.get("result"))
-                .map(result -> new JsonValue(gson, result))
+                .map(result -> new JsonElementValue(gson, result))
                 .ifPresent(response::success);
 
         Optional.ofNullable(payload.get("error"))

@@ -14,4 +14,8 @@ public class Parameters {
     public List<Param> list() {
         return Collections.unmodifiableList(parameters);
     }
+
+    public int count() {
+        return parameters.size();
+    }
 }

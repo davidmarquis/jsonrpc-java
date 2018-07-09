@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 
 public class ValueThat {
-
     public static <T> Matcher<Value> readsAs(Type type, Matcher<T> andMatches) {
         return new FeatureMatcher<>(andMatches, "reads as " + type, "read as " + type) {
             @Override
@@ -25,8 +24,11 @@ public class ValueThat {
         return readsAs(String.class, equalTo(value));
     }
 
-    public static Matcher<? super Value> isSameValue(Value result) {
-        return result == null ? nullValue() :
-                readsAs(result.type(), equalTo(result.readAs(result.type())));
+    public static Matcher<? super Value> hasValue(Value result) {
+        if (result == null) return nullValue();
+        assert result.getType().isPresent();
+
+        Type type = result.getType().get();
+        return readsAs(type, equalTo(result.readAs(type)));
     }
 }

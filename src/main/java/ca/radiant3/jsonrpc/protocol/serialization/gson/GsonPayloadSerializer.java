@@ -7,6 +7,9 @@ import ca.radiant3.jsonrpc.json.ResponseJson;
 import ca.radiant3.jsonrpc.protocol.serialization.PayloadSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
@@ -22,7 +25,7 @@ public class GsonPayloadSerializer implements PayloadSerializer {
     public GsonPayloadSerializer(GsonBuilder builder) {
         Gson baseGson = builder
                 .serializeNulls()
-                .registerTypeAdapter(Value.class, new ValueTypeAdapter(builder.create()))
+                .registerTypeAdapterFactory(new ValueTypeAdapterFactory())
                 .registerTypeAdapter(ErrorJson.class, new ErrorTypeAdapter(builder.create()))
                 .create();
 
@@ -56,4 +59,17 @@ public class GsonPayloadSerializer implements PayloadSerializer {
         return gson.fromJson(reader, ResponseJson.class);
     }
 
+    /**
+     * Creates type adapters for any instance of the Value interface.
+     */
+    private static class ValueTypeAdapterFactory implements TypeAdapterFactory {
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+            if (type.getRawType().isAssignableFrom(Value.class)) {
+                return (TypeAdapter<T>) new ValueTypeAdapter(gson);
+            }
+            return null;
+        }
+    }
 }

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import static ca.radiant3.jsonrpc.testkit.ErrorJsonThat.hasSameState;
-import static ca.radiant3.jsonrpc.testkit.ValueThat.isSameValue;
+import static ca.radiant3.jsonrpc.testkit.ValueThat.hasValue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -83,7 +83,7 @@ public class JsonRpc2ProtocolTest {
 
         @Test
         public void includesMethodReturnValue() {
-            assertThat(response.getResponse().getResult(), isSameValue(result));
+            assertThat(response.getResponse().getResult(), hasValue(result));
             assertThat(response.getResponse().getError(), nullValue());
         }
 

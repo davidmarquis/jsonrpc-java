@@ -37,7 +37,6 @@ public class InvocationTypeAdapter extends TypeAdapter<InvocationJson> {
                 Map<String, Value> values = parameters.toMap();
                 for (Map.Entry<String, Value> entry : values.entrySet()) {
                     out.name(entry.getKey());
-
                     gson.toJson(entry.getValue(), Value.class, out);
                 }
                 out.endObject();
@@ -53,7 +52,7 @@ public class InvocationTypeAdapter extends TypeAdapter<InvocationJson> {
     }
 
     @Override
-    public InvocationJson read(JsonReader in) throws IOException {
+    public InvocationJson read(JsonReader in) {
         JsonObject payload = parser.parse(in).getAsJsonObject();
 
         InvocationJson invocation = new InvocationJson()
@@ -69,16 +68,16 @@ public class InvocationTypeAdapter extends TypeAdapter<InvocationJson> {
                 List<Value> paramValues = new ArrayList<>(paramsArray.size());
 
                 for (JsonElement param : paramsArray) {
-                    paramValues.add(new JsonValue(gson, param));
+                    paramValues.add(new JsonElementValue(gson, param));
                 }
-                parameters = ParametersJson.of(paramValues);
+                parameters = ParametersJson. of(paramValues);
 
             } else {
                 parameters = ParametersJson.named();
 
                 JsonObject paramsObj = params.getAsJsonObject();
                 for (Map.Entry<String, JsonElement> entry : paramsObj.entrySet()) {
-                    parameters.add(entry.getKey(), new JsonValue(gson, entry.getValue()));
+                    parameters.add(entry.getKey(), new JsonElementValue(gson, entry.getValue()));
                 }
             }
             invocation.withParameters(parameters);

@@ -7,7 +7,6 @@ import org.hamcrest.Matcher;
 
 import java.io.Serializable;
 
-import static ca.radiant3.jsonrpc.testkit.ValueThat.isSameValue;
 import static org.hamcrest.Matchers.*;
 
 public class ResponseJsonThat {
@@ -34,6 +33,6 @@ public class ResponseJsonThat {
     }
 
     public static Matcher<ResponseJson> hasResult(Value result) {
-        return hasProperty("result", isSameValue(result));
+        return hasProperty("result", ValueThat.hasValue(result));
     }
 }

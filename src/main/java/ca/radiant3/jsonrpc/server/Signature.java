@@ -44,7 +44,29 @@ public class Signature {
     }
 
     public boolean matches(Invocation invocation) {
+        return hasSameMethodName(invocation) &&
+                hasSameParameterCount(invocation) &&
+                parameterTypesCompatible(invocation);
+    }
+
+    private boolean hasSameMethodName(Invocation invocation) {
         return methodName().equals(invocation.getMethodName());
+    }
+
+    private boolean hasSameParameterCount(Invocation invocation) {
+        return parameters.size() == invocation.getParameters().count();
+    }
+
+    private boolean parameterTypesCompatible(Invocation invocation) {
+        List<Param> list = invocation.getParameters().list();
+        for (int i = 0; i < list.size(); i++) {
+            Param invocationParam = list.get(i);
+            DeclaredParameter declaredParam = parameters.get(i);
+            if (!invocationParam.getValue().isCompatibleWith(declaredParam.getType())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Object invoke(Object target, Invocation invocation)
@@ -66,16 +88,15 @@ public class Signature {
     }
 
     public static class DeclaredParameter {
-        private final Class<?> type;
+        private final Type type;
         private String name;
 
-        public DeclaredParameter(Class<?> type) {
+        public DeclaredParameter(Type type) {
             this.type = type;
         }
 
         public static DeclaredParameter of(Parameter parameter) {
-            DeclaredParameter declared = new DeclaredParameter(parameter.getType());
-            return declared;
+            return new DeclaredParameter(parameter.getParameterizedType());
         }
 
         public DeclaredParameter named(String name) {
@@ -87,7 +108,7 @@ public class Signature {
             return name;
         }
 
-        public Class<?> getType() {
+        public Type getType() {
             return type;
         }
     }

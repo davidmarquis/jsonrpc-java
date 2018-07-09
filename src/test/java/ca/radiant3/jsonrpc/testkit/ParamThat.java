@@ -4,14 +4,13 @@ import ca.radiant3.jsonrpc.Param;
 import ca.radiant3.jsonrpc.Value;
 import org.hamcrest.Matcher;
 
-import static ca.radiant3.jsonrpc.testkit.ValueThat.isSameValue;
 import static ca.radiant3.jsonrpc.testkit.ValueThat.readsAs;
 import static org.hamcrest.Matchers.*;
 
 public class ParamThat {
     public static Matcher<Param> hasSameState(Param other) {
         return allOf(
-                withValue(isSameValue(other.getValue())),
+                withValue(ValueThat.hasValue(other.getValue())),
                 withName(other.getName())
         );
     }

@@ -6,9 +6,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import java.io.IOException;
-
-class ValueTypeAdapter extends TypeAdapter<Value> {
+public class ValueTypeAdapter extends TypeAdapter<Value> {
     private final Gson gson;
 
     public ValueTypeAdapter(Gson gson) {
@@ -16,12 +14,16 @@ class ValueTypeAdapter extends TypeAdapter<Value> {
     }
 
     @Override
-    public void write(JsonWriter out, Value value) throws IOException {
-        gson.toJson(value.get(), value.type(), out);
+    public void write(JsonWriter out, Value value) {
+        value.getType().ifPresentOrElse(
+                (type) -> gson.toJson(value.readAs(type), type, out),
+                () -> {
+                    throw new UnsupportedOperationException("Cannot write a Value of an unknown type");
+                });
     }
 
     @Override
-    public Value read(JsonReader in) throws IOException {
-        return null;
+    public Value read(JsonReader in) {
+        throw new UnsupportedOperationException("ValueTypeAdapter can only be used to write values");
     }
 }
