@@ -8,7 +8,7 @@ import java.util.Optional;
 public class ResponseJson {
     public static final String V2 = "2.0";
 
-    private String jsonrpc = "2.0";
+    private final String jsonrpc;
     private Serializable id;
     private Value result;
     private ErrorJson error;
