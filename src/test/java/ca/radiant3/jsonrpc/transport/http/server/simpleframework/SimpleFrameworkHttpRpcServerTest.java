@@ -16,12 +16,13 @@ import static org.junit.Assert.assertThat;
 
 public class SimpleFrameworkHttpRpcServerTest {
     SimpleFrameworkHttpRpcServer server = new SimpleFrameworkHttpRpcServer(8777);
-    MyService client = RpcClientProxy.createFor(MyService.class, HttpJsonRpcClient.create("http://localhost:8777/echo.json"));
+
+    MyRemoteService client = RpcClientProxy.createFor(MyRemoteService.class, HttpJsonRpcClient.create("http://localhost:8777/echo.json"));
 
     @Before
     public void startServer() throws IOException {
         server.bind(URI.create("/echo.json"),
-                    RpcEndpointBuilder.byReflection(MyService.class, new MyServiceServer()).create()
+                    RpcEndpointBuilder.byReflection(MyRemoteService.class, new MyRemoteServiceServer()).create()
         );
         server.start();
     }
@@ -38,11 +39,11 @@ public class SimpleFrameworkHttpRpcServerTest {
         assertThat(result, equalTo("Hello World!"));
     }
 
-    public interface MyService {
+    public interface MyRemoteService {
         String join(String value1, String value2);
     }
 
-    public static class MyServiceServer implements MyService {
+    public static class MyRemoteServiceServer implements MyRemoteService {
         public String join(String value1, String value2) {
             return String.join(" ", List.of(value1, value2));
         }
