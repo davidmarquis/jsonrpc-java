@@ -12,7 +12,7 @@ public class InvocationThat {
     public static Matcher<Invocation> hasSameState(Invocation other) {
         return allOf(
                 hasMethodName(other.getMethodName()),
-                hasParameters(other.getArguments())
+                hasArguments(other.getArguments())
         );
     }
 
@@ -20,7 +20,7 @@ public class InvocationThat {
         return hasProperty("methodName", equalTo(methodName));
     }
 
-    public static Matcher<Invocation> hasParameters(Args arguments) {
-        return hasProperty("parameters", ParametersThat.hasSameState(arguments));
+    public static Matcher<Invocation> hasArguments(Args arguments) {
+        return hasProperty("arguments", ArgumentsThat.hasSameState(arguments));
     }
 }

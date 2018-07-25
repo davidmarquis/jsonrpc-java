@@ -96,7 +96,7 @@ public class SignatureTest {
 
 
             assertThat(invocation, hasSameState(Invocation.of("singleParam")
-                                                          .withParameter(Arg.of(Value.of("value")))));
+                                                          .withArgument(Arg.of(Value.of("value")))));
         }
 
         @Test
@@ -107,9 +107,9 @@ public class SignatureTest {
 
 
             assertThat(invocation, hasSameState(Invocation.of("multipleParams")
-                                                          .withParameter(Arg.of(Value.of("value")))
-                                                          .withParameter(Arg.of(Value.of(123)))
-                                                          .withParameter(Arg.of(Value.of(true)))
+                                                          .withArgument(Arg.of(Value.of("value")))
+                                                          .withArgument(Arg.of(Value.of(123)))
+                                                          .withArgument(Arg.of(Value.of(true)))
             ));
         }
 
@@ -121,8 +121,8 @@ public class SignatureTest {
 
 
             assertThat(invocation, hasSameState(Invocation.of("namedParams")
-                                                          .withParameter(Arg.of(Value.of("value")).named("first"))
-                                                          .withParameter(Arg.of(Value.of(123)).named("second"))
+                                                          .withArgument(Arg.of(Value.of("value")).named("first"))
+                                                          .withArgument(Arg.of(Value.of(123)).named("second"))
             ));
         }
     }

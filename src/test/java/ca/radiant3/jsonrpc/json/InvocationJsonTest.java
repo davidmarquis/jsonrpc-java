@@ -69,7 +69,7 @@ public class InvocationJsonTest {
         @Test
         public void includesParameters() {
             InvocationJson json = InvocationJson.of(invocation
-                                                            .withParameter(Arg.of(Value.of("someValue"))));
+                                                            .withArgument(Arg.of(Value.of("someValue"))));
 
             assertThat(json, hasParameters(hasSameState(unnamed(Value.of("someValue")))));
         }

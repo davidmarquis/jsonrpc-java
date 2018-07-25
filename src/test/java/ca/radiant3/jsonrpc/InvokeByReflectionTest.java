@@ -21,7 +21,7 @@ public class InvokeByReflectionTest {
     @Test
     public void singleParameterString() throws Exception {
         Value result = handler.handle(Invocation.of("duplicate")
-                                                .withParameter(Arg.of(Value.of("hello world"))));
+                                                .withArgument(Arg.of(Value.of("hello world"))));
 
         assertThat(result, readsAsString("hello worldhello world"));
     }
@@ -29,7 +29,7 @@ public class InvokeByReflectionTest {
     @Test
     public void singleParameterInteger() throws Exception {
         Value result = handler.handle(Invocation.of("duplicate")
-                                                .withParameter(Arg.of(Value.of(12))));
+                                                .withArgument(Arg.of(Value.of(12))));
 
         assertThat(result, readsAsString("24"));
     }
@@ -37,7 +37,7 @@ public class InvokeByReflectionTest {
     @Test
     public void listOfStringsParameter() throws Exception {
         Value result = handler.handle(Invocation.of("join")
-                                                .withParameter(Arg.of(Value.of(List.of("h", "e", "l", "l", "o")))));
+                                                .withArgument(Arg.of(Value.of(List.of("h", "e", "l", "l", "o")))));
 
         assertThat(result, readsAsString("hello"));
     }

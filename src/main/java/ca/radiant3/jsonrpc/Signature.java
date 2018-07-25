@@ -90,7 +90,7 @@ public class Signature {
             Object argument = args.get(i);
             DeclaredParameter parameter = declaredParameters.get(i);
 
-            result.withParameter(parameter.forValue(argument));
+            result.withArgument(parameter.forValue(argument));
         }
         return result;
     }

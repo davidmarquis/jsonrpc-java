@@ -16,7 +16,7 @@ public class Invocation {
         return methodName;
     }
 
-    public Invocation withParameter(Arg arg) {
+    public Invocation withArgument(Arg arg) {
         arguments.add(arg);
         return this;
     }

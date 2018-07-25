@@ -11,7 +11,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.emptyIterableOf;
 
-public class ParametersThat {
+public class ArgumentsThat {
 
     public static Matcher<Args> hasSameState(Args other) {
         return hasParams(other.list());
