@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id 'net.researchgate.release' version '2.6.0'
 }
 
 group 'ca.radiant3'
