@@ -27,7 +27,7 @@ public class InvocationSerializationTest extends BaseSerializationTest {
         String json = serialize(new InvocationJson()
                                         .withJsonrpc("2.0")
                                         .withMethod("someMethod")
-                                        .withParameters(ParametersJson.of(
+                                        .withParameters(ParametersJson.unnamed(
                                                 Value.of("toto")
                                         )));
 
@@ -59,7 +59,7 @@ public class InvocationSerializationTest extends BaseSerializationTest {
         String json = serialize(new InvocationJson()
                                         .withJsonrpc("2.0")
                                         .withMethod("someMethod")
-                                        .withParameters(ParametersJson.of(
+                                        .withParameters(ParametersJson.unnamed(
                                                 Value.of("toto"),
                                                 Value.empty(),
                                                 Value.of(120)

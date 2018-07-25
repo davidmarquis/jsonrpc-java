@@ -2,7 +2,7 @@ package ca.radiant3.jsonrpc;
 
 public class Invocation {
     private String methodName;
-    private Parameters parameters = new Parameters();
+    private Args arguments = new Args();
 
     public Invocation(String methodName) {
         this.methodName = methodName;
@@ -16,12 +16,12 @@ public class Invocation {
         return methodName;
     }
 
-    public Invocation withParameter(Param param) {
-        parameters.addParameter(param);
+    public Invocation withParameter(Arg arg) {
+        arguments.add(arg);
         return this;
     }
 
-    public Parameters getParameters() {
-        return parameters;
+    public Args getArguments() {
+        return arguments;
     }
 }

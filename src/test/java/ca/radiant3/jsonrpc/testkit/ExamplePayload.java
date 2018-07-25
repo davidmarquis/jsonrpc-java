@@ -1,22 +1,22 @@
-package ca.radiant3.jsonrpc;
+package ca.radiant3.jsonrpc.testkit;
 
 import ca.radiant3.jsonrpc.protocol.InvocationPayload;
 
 import java.io.InputStream;
 
-public class Example {
+public class ExamplePayload {
     private final String path;
 
-    public Example(String path) {
+    public ExamplePayload(String path) {
         this.path = path;
     }
 
-    public static Example get(String testResourcesPath) {
-       return new Example(testResourcesPath);
+    public static ExamplePayload get(String testResourcesPath) {
+       return new ExamplePayload(testResourcesPath);
     }
 
     public InputStream read() {
-        return Example.class.getResourceAsStream(path);
+        return ExamplePayload.class.getResourceAsStream(path);
     }
 
     public InvocationPayload asInvocation() {

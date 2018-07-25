@@ -5,7 +5,7 @@ import ca.radiant3.jsonrpc.protocol.ResponsePayload;
 
 import java.util.concurrent.CompletableFuture;
 
-public interface RpcService {
+public interface RpcEndpoint {
 
     CompletableFuture<ResponsePayload> invoke(InvocationPayload invocation);
 }

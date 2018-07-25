@@ -1,8 +1,8 @@
 package ca.radiant3.jsonrpc.protocol.serialization;
 
-import ca.radiant3.jsonrpc.Example;
 import ca.radiant3.jsonrpc.Value;
 import ca.radiant3.jsonrpc.json.InvocationJson;
+import ca.radiant3.jsonrpc.testkit.ExamplePayload;
 import org.junit.Test;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class InvocationDeserializationTest extends BaseSerializationTest {
     @Test
     public void notificationWithoutParameters() {
         InvocationJson invocation = serializer.readInvocation(
-                Example.get("/examples/notification-no-param.json").read());
+                ExamplePayload.get("/examples/notification-no-param.json").read());
 
         assertThat(invocation.getJsonrpc(), is("2.0"));
         assertThat(invocation.getMethod(), is("someMethod"));
@@ -28,7 +28,7 @@ public class InvocationDeserializationTest extends BaseSerializationTest {
     @Test
     public void notificationWithParametersArray() {
         InvocationJson invocation = serializer.readInvocation(
-                Example.get("/examples/notification-params-array.json").read());
+                ExamplePayload.get("/examples/notification-params-array.json").read());
 
         List<Value> params = invocation.getParams().values();
 
@@ -42,7 +42,7 @@ public class InvocationDeserializationTest extends BaseSerializationTest {
     @Test
     public void notificationWithParametersNamed() {
         InvocationJson invocation = serializer.readInvocation(
-                Example.get("/examples/notification-params-named.json").read());
+                ExamplePayload.get("/examples/notification-params-named.json").read());
 
         Map<String, Value> params = invocation.getParams().toMap();
 

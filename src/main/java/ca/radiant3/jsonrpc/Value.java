@@ -93,5 +93,10 @@ public interface Value {
         public int hashCode() {
             return Objects.hash(value, type);
         }
+
+        @Override
+        public String toString() {
+            return Objects.toString(value) + '<' + type.getTypeName() + '>';
+        }
     }
 }

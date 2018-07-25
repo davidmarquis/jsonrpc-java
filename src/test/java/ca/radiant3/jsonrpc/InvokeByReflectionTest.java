@@ -9,11 +9,10 @@ import static ca.radiant3.jsonrpc.testkit.ValueThat.readsAsString;
 import static org.junit.Assert.assertThat;
 
 public class InvokeByReflectionTest {
+    InvokeByReflection handler = new InvokeByReflection(MyService.class, new MyServiceImpl());
 
     @Test
     public void withoutParameter() throws Exception {
-        InvokeByReflection handler = new InvokeByReflection(MyService.class, new MyServiceImpl());
-
         Value result = handler.handle(Invocation.of("noParameter"));
 
         assertThat(result, readsAsString("some value"));
@@ -21,30 +20,24 @@ public class InvokeByReflectionTest {
 
     @Test
     public void singleParameterString() throws Exception {
-        InvokeByReflection handler = new InvokeByReflection(MyService.class, new MyServiceImpl());
-
         Value result = handler.handle(Invocation.of("duplicate")
-                                                       .withParameter(new Param(Value.of("hello world"))));
+                                                .withParameter(Arg.of(Value.of("hello world"))));
 
         assertThat(result, readsAsString("hello worldhello world"));
     }
 
     @Test
     public void singleParameterInteger() throws Exception {
-        InvokeByReflection handler = new InvokeByReflection(MyService.class, new MyServiceImpl());
-
         Value result = handler.handle(Invocation.of("duplicate")
-                                                       .withParameter(new Param(Value.of(12))));
+                                                .withParameter(Arg.of(Value.of(12))));
 
         assertThat(result, readsAsString("24"));
     }
 
     @Test
     public void listOfStringsParameter() throws Exception {
-        InvokeByReflection handler = new InvokeByReflection(MyService.class, new MyServiceImpl());
-
         Value result = handler.handle(Invocation.of("join")
-                                                       .withParameter(new Param(Value.of(List.of("h", "e", "l", "l", "o")))));
+                                                .withParameter(Arg.of(Value.of(List.of("h", "e", "l", "l", "o")))));
 
         assertThat(result, readsAsString("hello"));
     }
@@ -53,6 +46,7 @@ public class InvokeByReflectionTest {
         String noParameter();
 
         String duplicate(String param);
+
         String duplicate(Integer param);
 
         String join(List<String> items);

@@ -1,12 +1,12 @@
 package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
-import ca.radiant3.jsonrpc.Example;
 import ca.radiant3.jsonrpc.Value;
 import ca.radiant3.jsonrpc.json.ResponseJson;
 import ca.radiant3.jsonrpc.protocol.Errors;
 import ca.radiant3.jsonrpc.protocol.InvocationPayload;
 import ca.radiant3.jsonrpc.protocol.ResponsePayload;
 import ca.radiant3.jsonrpc.protocol.serialization.gson.GsonPayloadSerializer;
+import ca.radiant3.jsonrpc.testkit.ExamplePayload;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.junit.Before;
@@ -45,7 +45,7 @@ public class JsonRpc2ProtocolTest {
 
         @Test
         public void invalidFormat() {
-            ResponseJson response = invoke(Example.get("/examples/invalid/notification-badly-formed.json"));
+            ResponseJson response = invoke(ExamplePayload.get("/examples/invalid/notification-badly-formed.json"));
 
             assertThat(response.getError(), hasSameState(Errors.invalidFormat()));
             assertThat(response.getResult(), nullValue());
@@ -53,7 +53,7 @@ public class JsonRpc2ProtocolTest {
 
         @Test
         public void invalidProtocol() {
-            ResponseJson response = invoke(Example.get("/examples/invalid/notification-invalid-protocol.json"));
+            ResponseJson response = invoke(ExamplePayload.get("/examples/invalid/notification-invalid-protocol.json"));
 
             assertThat(response.getError(), hasSameState(Errors.invalidProtocol("1.0")));
             assertThat(response.getResult(), nullValue());
@@ -63,7 +63,7 @@ public class JsonRpc2ProtocolTest {
         public void exceptionDuringInvocationIsTranslatedToErrorResponse() {
             handler.throwing(new NoSuchMethodException());
 
-            ResponseJson response = invoke(Example.get("/examples/notification-no-param.json"));
+            ResponseJson response = invoke(ExamplePayload.get("/examples/notification-no-param.json"));
 
             assertThat(response.getError(), hasSameState(Errors.methodNotFound()));
             assertThat(response.getResult(), nullValue());
@@ -78,7 +78,7 @@ public class JsonRpc2ProtocolTest {
         public void setUp() {
             handler.returns(result);
             response = (JsonRpc2Protocol.JsonResponsePayload) protocol.invoke(
-                    Example.get("/examples/notification-no-param.json").asInvocation());
+                    ExamplePayload.get("/examples/notification-no-param.json").asInvocation());
         }
 
         @Test
@@ -101,7 +101,7 @@ public class JsonRpc2ProtocolTest {
         }
     }
 
-    private static ResponseJson invoke(Example example) {
+    private static ResponseJson invoke(ExamplePayload example) {
         return invoke(example.asInvocation());
     }
 

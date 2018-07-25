@@ -1,22 +1,22 @@
 package ca.radiant3.jsonrpc.server;
 
 import ca.radiant3.jsonrpc.Invocation;
+import ca.radiant3.jsonrpc.Signature;
 import ca.radiant3.jsonrpc.Value;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static ca.radiant3.jsonrpc.Signature.hasParameters;
 import static java.util.stream.Collectors.toList;
 
 public class InvokeByReflection implements InvocationHandler {
 
-    private final Class<?> publishedInterface;
     private final Object target;
 
     private final List<Signature> signatures;
 
     public <T> InvokeByReflection(Class<? super T> publishedInterface, T implementation) {
-        this.publishedInterface = publishedInterface;
         this.target = implementation;
 
         this.signatures = Arrays.stream(publishedInterface.getMethods())
@@ -33,9 +33,17 @@ public class InvokeByReflection implements InvocationHandler {
     private Signature resolveMethod(Invocation invocation) throws NoSuchMethodException {
         String methodName = invocation.getMethodName();
 
-        return signatures.stream()
-                     .filter(it -> it.matches(invocation))
-                     .findFirst()
-                     .orElseThrow(() -> new NoSuchMethodException(methodName));
+        List<Signature> remaining = signatures.stream()
+                                              .filter(Signature.hasMethodName(methodName))
+                                              .collect(toList());
+        if (remaining.isEmpty()) {
+            throw new NoSuchMethodException(methodName);
+        }
+
+        return remaining.stream()
+                        .filter(hasParameters(invocation.getArguments()))
+                        .findFirst()
+                        // todo: throw something related to args being invalid
+                        .orElseThrow(() -> new NoSuchMethodException(methodName));
     }
 }

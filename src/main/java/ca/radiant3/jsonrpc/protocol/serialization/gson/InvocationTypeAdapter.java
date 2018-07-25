@@ -70,7 +70,7 @@ public class InvocationTypeAdapter extends TypeAdapter<InvocationJson> {
                 for (JsonElement param : paramsArray) {
                     paramValues.add(new JsonElementValue(gson, param));
                 }
-                parameters = ParametersJson. of(paramValues);
+                parameters = ParametersJson.unnamed(paramValues);
 
             } else {
                 parameters = ParametersJson.named();

@@ -29,6 +29,6 @@ public class ValueThat {
         assert result.getType().isPresent();
 
         Type type = result.getType().get();
-        return readsAs(type, equalTo(result.readAs(type)));
+        return ValueThat.readsAs(type, equalTo(result.readAs(type)));
     }
 }

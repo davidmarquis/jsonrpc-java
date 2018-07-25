@@ -1,9 +1,9 @@
 package ca.radiant3.jsonrpc.protocol.serialization;
 
-import ca.radiant3.jsonrpc.Example;
 import ca.radiant3.jsonrpc.Value;
 import ca.radiant3.jsonrpc.json.ErrorJson;
 import ca.radiant3.jsonrpc.json.ResponseJson;
+import ca.radiant3.jsonrpc.testkit.ExamplePayload;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -16,7 +16,7 @@ public class ResponseDeserializationTest extends BaseSerializationTest {
     @Test
     public void successWithString() {
         ResponseJson response = serializer.readResponse(
-                Example.get("/examples/response/success-string.json").read());
+                ExamplePayload.get("/examples/response/success-string.json").read());
 
         assertThat(response, hasSameState(aResponse().withId(1992)
                                                      .success(Value.of("ok"))));
@@ -25,7 +25,7 @@ public class ResponseDeserializationTest extends BaseSerializationTest {
     @Test
     public void successWithNumber() {
         ResponseJson response = serializer.readResponse(
-                Example.get("/examples/response/success-number.json").read());
+                ExamplePayload.get("/examples/response/success-number.json").read());
 
         assertThat(response, hasSameState(aResponse().withId(1992)
                                                      .success(Value.of(123))));
@@ -34,7 +34,7 @@ public class ResponseDeserializationTest extends BaseSerializationTest {
     @Test
     public void successWithObject() {
         ResponseJson response = serializer.readResponse(
-                Example.get("/examples/response/success-object.json").read());
+                ExamplePayload.get("/examples/response/success-object.json").read());
 
         assertThat(response, hasSameState(aResponse().withId(1992)
                                                      .success(Value.of(new ExampleObject("value")))));
@@ -43,7 +43,7 @@ public class ResponseDeserializationTest extends BaseSerializationTest {
     @Test
     public void notificationError() {
         ResponseJson response = serializer.readResponse(
-                Example.get("/examples/response/notification-error.json").read());
+                ExamplePayload.get("/examples/response/notification-error.json").read());
 
         assertThat(response, hasSameState(aResponse()
                                                   .error(ErrorJson.of(-19300).withMessage("This is a message"))));
@@ -52,7 +52,7 @@ public class ResponseDeserializationTest extends BaseSerializationTest {
     @Test
     public void error() {
         ResponseJson response = serializer.readResponse(
-                Example.get("/examples/response/error.json").read());
+                ExamplePayload.get("/examples/response/error.json").read());
 
         assertThat(response, hasSameState(aResponse().withId(1992)
                                                      .error(ErrorJson.of(-19300).withMessage("This is a message"))));

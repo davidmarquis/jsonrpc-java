@@ -1,7 +1,7 @@
 package ca.radiant3.jsonrpc.json;
 
-import ca.radiant3.jsonrpc.Param;
-import ca.radiant3.jsonrpc.Parameters;
+import ca.radiant3.jsonrpc.Arg;
+import ca.radiant3.jsonrpc.Args;
 import ca.radiant3.jsonrpc.Value;
 
 import java.util.ArrayList;
@@ -21,13 +21,13 @@ public class ParametersJson {
         return new ParametersJson();
     }
 
-    public static ParametersJson of(Value... values) {
+    public static ParametersJson unnamed(Value... values) {
         ParametersJson params = new ParametersJson();
         Arrays.stream(values).forEach(params::add);
         return params;
     }
 
-    public static ParametersJson of(List<Value> values) {
+    public static ParametersJson unnamed(List<Value> values) {
         ParametersJson params = new ParametersJson();
         values.forEach(params::add);
         return params;
@@ -35,6 +35,14 @@ public class ParametersJson {
 
     public static ParametersJson named() {
         return new ParametersJson();
+    }
+
+    public static ParametersJson of(Args arguments) {
+        ParametersJson result = ParametersJson.none();
+        result.params = arguments.list().stream()
+                                 .map(Parameter::fromParam)
+                                 .collect(toList());
+        return result;
     }
 
     private void add(Value unnamed) {
@@ -62,8 +70,8 @@ public class ParametersJson {
         return params.stream().anyMatch(Parameter::isNamed);
     }
 
-    public void addTo(Parameters parameters) {
-        params.forEach(p -> parameters.addParameter(p.toParam()));
+    public void addTo(Args arguments) {
+        params.forEach(p -> arguments.add(p.toParam()));
     }
 
     public int count() {
@@ -95,12 +103,16 @@ public class ParametersJson {
             return value;
         }
 
-        public Param toParam() {
-            Param param = new Param(value);
+        public Arg toParam() {
+            Arg arg = Arg.of(value);
             if (name != null) {
-                param = param.named(name);
+                arg = arg.named(name);
             }
-            return param;
+            return arg;
+        }
+
+        public static Parameter fromParam(Arg arg) {
+            return new Parameter(arg.getValue()).named(arg.getName());
         }
     }
 }

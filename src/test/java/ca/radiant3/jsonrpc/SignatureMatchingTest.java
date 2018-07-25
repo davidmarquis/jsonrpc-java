@@ -1,14 +1,12 @@
 package ca.radiant3.jsonrpc;
 
-import ca.radiant3.jsonrpc.server.Signature;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-
+import static ca.radiant3.jsonrpc.Signature.hasParameters;
+import static ca.radiant3.jsonrpc.testkit.ValueBuilder.anyInt;
+import static ca.radiant3.jsonrpc.testkit.ValueBuilder.anyString;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -16,110 +14,52 @@ import static org.junit.Assert.assertTrue;
 public class SignatureMatchingTest {
     private interface Example {
         void noParam();
+
         void singleParam(String param);
+
         void multipleParams(String param1, int param2);
     }
 
-    public static class NoParameter {
-        private Signature signature;
-
-        @Before
-        public void withSignature() throws NoSuchMethodException {
-            signature = Signature.of(Example.class.getMethod("noParam"));
-        }
-
-        private Invocation invocationWith(Param... params) {
-            Invocation invocation = Invocation.of("noParam");
-            Arrays.stream(params).forEach(invocation::withParameter);
-            return invocation;
-        }
-
-        @Test
-        public void matches() {
-            assertTrue(signature.matches(
-                    invocationWith()
-            ));
-        }
-
-        @Test
-        public void doesNotMatchWhenAnyParameterPresent() {
-            assertFalse(signature.matches(
-                    invocationWith(new Param(Value.of("extra parameter")))
-            ));
-        }
-    }
-
-    public static class SingleParameter {
-        private Signature signature;
-
-        @Before
-        public void withSignature() throws NoSuchMethodException {
-            signature = Signature.of(Example.class.getMethod("singleParam", String.class));
-        }
-
-        private Invocation invocationWith(Param... params) {
-            Invocation invocation = Invocation.of("singleParam");
-            Arrays.stream(params).forEach(invocation::withParameter);
-            return invocation;
-        }
-
+    public static class ByName {
         @Test
         public void matches() throws NoSuchMethodException {
-            Method method = Example.class.getMethod("singleParam", String.class);
+            Signature signature = Signature.of(Example.class.getMethod("noParam"));
 
-            assertTrue(Signature.of(method).matches(
-                    invocationWith(new Param(Value.of("param")))
-            ));
-        }
-
-        @Test
-        public void doesNotMatchWhenNoParameterPresent() {
-            assertFalse(signature.matches(
-                    invocationWith()
-            ));
+            assertTrue(Signature.hasMethodName("noParam").test(signature));
+            assertFalse(Signature.hasMethodName("unknownName").test(signature));
         }
     }
 
-    public static class MultipleParameters {
-        private Signature signature;
+    public static class ByArguments {
+        Args none = Args.none();
+        Args one = Args.of(anyString());
+        Args two = Args.of(anyString(), anyInt());
 
-        @Before
-        public void withSignature() throws NoSuchMethodException {
-            signature = Signature.of(Example.class.getMethod("multipleParams", String.class, int.class));
-        }
+        @Test
+        public void matchesForEmptyParameters() throws NoSuchMethodException {
+            Signature signature = Signature.of(Example.class.getMethod("noParam"));
 
-        private Invocation invocationWith(Param... params) {
-            Invocation invocation = Invocation.of("multipleParams");
-            Arrays.stream(params).forEach(invocation::withParameter);
-            return invocation;
+            assertTrue(hasParameters(none).test(signature));
+            assertFalse(hasParameters(one).test(signature));
+            assertFalse(hasParameters(two).test(signature));
         }
 
         @Test
-        public void matches() {
-            assertTrue(signature.matches(
-                    invocationWith(new Param(Value.of("param")), new Param(Value.of(123)))
-            ));
+        public void matchesForSingleParameters() throws NoSuchMethodException {
+            Signature signature = Signature.of(Example.class.getMethod("singleParam", String.class));
+
+            assertFalse(hasParameters(none).test(signature));
+            assertTrue(hasParameters(one).test(signature));
+            assertFalse(hasParameters(two).test(signature));
         }
 
         @Test
-        public void doesNotMatchWhenTypeIsIncompatible() {
-            assertFalse(signature.matches(
-                    invocationWith(new Param(Value.of("param")), new Param(Value.of("wrong type")))
-            ));
-        }
+        public void matchesForMultipleParameters() throws NoSuchMethodException {
+            Signature signature = Signature.of(Example.class.getMethod("multipleParams", String.class, int.class));
 
-        @Test
-        public void doesNotMatchWhenTooFewParameters() {
-            assertFalse(signature.matches(
-                    invocationWith(new Param(Value.of("only one parameter")))
-            ));
-        }
-
-        @Test
-        public void doesNotMatchWhenTooManyParameters() {
-            assertFalse(signature.matches(
-                    invocationWith(new Param(Value.of("param")), new Param(Value.of(123)), new Param(Value.of("extra parameter"))))
-            );
+            assertFalse(hasParameters(none).test(signature));
+            assertFalse(hasParameters(one).test(signature));
+            assertTrue(hasParameters(two).test(signature));
         }
     }
 }
