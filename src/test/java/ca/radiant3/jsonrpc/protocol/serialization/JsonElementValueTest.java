@@ -35,6 +35,7 @@ public class JsonElementValueTest {
             valueOf(aBoolean).whenReadAs(String.class, equalTo("true"));
 
             valueOf(aBoolean).doesNotReadAs(
+                    Byte.class, byte.class,
                     Character.class, char.class,
                     Short.class, short.class,
                     Integer.class, int.class,
@@ -50,8 +51,8 @@ public class JsonElementValueTest {
 
         @Test
         public void conversions() {
+            valueOf(singleDigitInteger).whenReadAs(Byte.class, byte.class, is((byte) 5));
             valueOf(singleDigitInteger).whenReadAs(Character.class, char.class, equalTo('5'));
-            valueOf(singleDigitInteger).whenReadAs(Character.class, char.class, is('5'));
             valueOf(singleDigitInteger).whenReadAs(Short.class, short.class, is((short) 5));
             valueOf(singleDigitInteger).whenReadAs(Integer.class, int.class, is(5));
             valueOf(singleDigitInteger).whenReadAs(Long.class, long.class, is((long) 5));
@@ -68,6 +69,7 @@ public class JsonElementValueTest {
 
         @Test
         public void conversions() {
+            valueOf(smallInteger).whenReadAs(Byte.class, byte.class, is((byte) 123));
             valueOf(smallInteger).whenReadAs(Short.class, short.class, is((short) 123));
             valueOf(smallInteger).whenReadAs(Integer.class, int.class, is(123));
             valueOf(smallInteger).whenReadAs(Long.class, long.class, is((long) 123));
@@ -87,6 +89,7 @@ public class JsonElementValueTest {
 
         @Test
         public void conversions() {
+            valueOf(largeInteger).whenReadAs(Byte.class, byte.class, is((byte) -117));  // overflows
             valueOf(largeInteger).whenReadAs(Short.class, short.class, is((short) -5237));  // overflows
             valueOf(largeInteger).whenReadAs(Integer.class, int.class, is(991882123));
             valueOf(largeInteger).whenReadAs(Long.class, long.class, is((long) 991882123));
@@ -119,6 +122,7 @@ public class JsonElementValueTest {
 
         @Test
         public void conversions() {
+            valueOf(decimal).whenReadAs(Byte.class, byte.class, is((byte) 345));
             valueOf(decimal).whenReadAs(Short.class, short.class, is((short) 345));
             valueOf(decimal).whenReadAs(Integer.class, int.class, is(345));
             valueOf(decimal).whenReadAs(Long.class, long.class, is((long) 345));
@@ -142,6 +146,7 @@ public class JsonElementValueTest {
             valueOf(nonNumericString).whenReadAs(String.class, is("true"));
 
             valueOf(nonNumericString).doesNotReadAs(
+                    Byte.class, byte.class,
                     Character.class, char.class,
                     Short.class, short.class,
                     Integer.class, int.class,
@@ -161,6 +166,7 @@ public class JsonElementValueTest {
             valueOf(nonNumericString).whenReadAs(String.class, is("abc"));
 
             valueOf(nonNumericString).doesNotReadAs(
+                    Byte.class, byte.class,
                     Character.class, char.class,
                     Short.class, short.class,
                     Integer.class, int.class,
@@ -184,6 +190,7 @@ public class JsonElementValueTest {
             valueOf(numericDecimalString).whenReadAs(String.class, is("199.19"));
 
             valueOf(numericDecimalString).doesNotReadAs(
+                    Byte.class, byte.class,
                     Character.class, char.class,
                     Short.class, short.class,
                     Integer.class, int.class,
@@ -197,6 +204,7 @@ public class JsonElementValueTest {
 
         @Test
         public void conversions() {
+            valueOf(numericIntegerString).whenReadAs(Byte.class, byte.class, is((byte) 199));
             valueOf(numericIntegerString).whenReadAs(Short.class, short.class, is((short) 199));
             valueOf(numericIntegerString).whenReadAs(Integer.class, int.class, is(199));
             valueOf(numericIntegerString).whenReadAs(Long.class, long.class, is((long) 199));
@@ -220,6 +228,7 @@ public class JsonElementValueTest {
             valueOf(singleCharacterString).whenReadAs(String.class, is("a"));
 
             valueOf(singleCharacterString).doesNotReadAs(
+                    Byte.class, byte.class,
                     Short.class, short.class,
                     Integer.class, int.class,
                     Long.class, long.class,
@@ -235,12 +244,13 @@ public class JsonElementValueTest {
         @Test
         public void conversions() {
             valueOf(singleDigitIntegerString).whenReadAs(Boolean.class, boolean.class, is(false));
+            valueOf(singleDigitIntegerString).whenReadAs(Byte.class, byte.class, is((byte) 8));
+            valueOf(singleDigitIntegerString).whenReadAs(Character.class, char.class, is('8'));
             valueOf(singleDigitIntegerString).whenReadAs(Short.class, short.class, is((short) 8));
             valueOf(singleDigitIntegerString).whenReadAs(Integer.class, int.class, is(8));
             valueOf(singleDigitIntegerString).whenReadAs(Long.class, long.class, is((long) 8));
             valueOf(singleDigitIntegerString).whenReadAs(Float.class, float.class, is(8f));
             valueOf(singleDigitIntegerString).whenReadAs(Double.class, double.class, is(8d));
-            valueOf(singleDigitIntegerString).whenReadAs(Character.class, char.class, is('8'));
             valueOf(singleDigitIntegerString).whenReadAs(String.class, is("8"));
         }
     }
@@ -257,6 +267,7 @@ public class JsonElementValueTest {
 
             valueOf(object).doesNotReadAs(
                     Boolean.class, boolean.class,
+                    Byte.class, byte.class,
                     Short.class, short.class,
                     Integer.class, int.class,
                     Long.class, long.class,
@@ -297,6 +308,7 @@ public class JsonElementValueTest {
 
             valueOf(arrayOfIntegers).doesNotReadAs(
                     Boolean.class, boolean.class,
+                    Byte.class, byte.class,
                     Short.class, short.class,
                     Integer.class, int.class,
                     Long.class, long.class,
