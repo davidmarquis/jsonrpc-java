@@ -1,10 +1,10 @@
 package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
 import ca.radiant3.jsonrpc.Value;
-import ca.radiant3.jsonrpc.json.ResponseJson;
 import ca.radiant3.jsonrpc.protocol.Errors;
 import ca.radiant3.jsonrpc.protocol.InvocationPayload;
 import ca.radiant3.jsonrpc.protocol.ResponsePayload;
+import ca.radiant3.jsonrpc.protocol.payload.ResponseJson;
 import ca.radiant3.jsonrpc.protocol.serialization.gson.GsonPayloadSerializer;
 import ca.radiant3.jsonrpc.testkit.ExamplePayload;
 import com.google.gson.JsonElement;

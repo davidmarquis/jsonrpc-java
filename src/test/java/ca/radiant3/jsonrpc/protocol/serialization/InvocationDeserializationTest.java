@@ -1,7 +1,7 @@
 package ca.radiant3.jsonrpc.protocol.serialization;
 
 import ca.radiant3.jsonrpc.Value;
-import ca.radiant3.jsonrpc.json.InvocationJson;
+import ca.radiant3.jsonrpc.protocol.payload.InvocationJson;
 import ca.radiant3.jsonrpc.testkit.ExamplePayload;
 import org.junit.Test;
 

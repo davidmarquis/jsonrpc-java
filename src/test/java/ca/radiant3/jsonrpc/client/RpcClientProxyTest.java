@@ -1,8 +1,8 @@
 package ca.radiant3.jsonrpc.client;
 
 import ca.radiant3.jsonrpc.Value;
-import ca.radiant3.jsonrpc.json.InvocationJson;
-import ca.radiant3.jsonrpc.json.ResponseJson;
+import ca.radiant3.jsonrpc.protocol.payload.InvocationJson;
+import ca.radiant3.jsonrpc.protocol.payload.ResponseJson;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import static ca.radiant3.jsonrpc.testkit.InvocationJsonThat.hasSameState;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class HttpRpcClientProxyTest {
+public class RpcClientProxyTest {
 
     RemoteRpcServiceFake remoteServiceFake = new RemoteRpcServiceFake();
 

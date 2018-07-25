@@ -1,4 +1,4 @@
-package ca.radiant3.jsonrpc.json;
+package ca.radiant3.jsonrpc.protocol.payload;
 
 import ca.radiant3.jsonrpc.Arg;
 import ca.radiant3.jsonrpc.Invocation;
@@ -7,8 +7,8 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
-import static ca.radiant3.jsonrpc.json.ParametersJson.named;
-import static ca.radiant3.jsonrpc.json.ParametersJson.unnamed;
+import static ca.radiant3.jsonrpc.protocol.payload.ParametersJson.named;
+import static ca.radiant3.jsonrpc.protocol.payload.ParametersJson.unnamed;
 import static ca.radiant3.jsonrpc.testkit.InvocationJsonThat.*;
 import static ca.radiant3.jsonrpc.testkit.ParamThat.hasSameState;
 import static ca.radiant3.jsonrpc.testkit.ParametersJsonThat.hasSameState;

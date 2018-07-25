@@ -1,6 +1,8 @@
-package ca.radiant3.jsonrpc;
+package ca.radiant3.jsonrpc.server;
 
-import ca.radiant3.jsonrpc.server.InvokeByReflection;
+import ca.radiant3.jsonrpc.Arg;
+import ca.radiant3.jsonrpc.Invocation;
+import ca.radiant3.jsonrpc.Value;
 import org.junit.Test;
 
 import java.util.List;

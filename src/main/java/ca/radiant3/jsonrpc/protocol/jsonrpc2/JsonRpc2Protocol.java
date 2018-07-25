@@ -1,9 +1,9 @@
 package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
 import ca.radiant3.jsonrpc.Invocation;
-import ca.radiant3.jsonrpc.json.InvocationJson;
-import ca.radiant3.jsonrpc.json.ResponseJson;
 import ca.radiant3.jsonrpc.protocol.*;
+import ca.radiant3.jsonrpc.protocol.payload.InvocationJson;
+import ca.radiant3.jsonrpc.protocol.payload.ResponseJson;
 import ca.radiant3.jsonrpc.protocol.serialization.PayloadSerializer;
 import ca.radiant3.jsonrpc.server.InvocationHandler;
 

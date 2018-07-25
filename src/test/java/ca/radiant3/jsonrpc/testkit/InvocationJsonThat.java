@@ -1,7 +1,7 @@
 package ca.radiant3.jsonrpc.testkit;
 
-import ca.radiant3.jsonrpc.json.InvocationJson;
-import ca.radiant3.jsonrpc.json.ParametersJson;
+import ca.radiant3.jsonrpc.protocol.payload.InvocationJson;
+import ca.radiant3.jsonrpc.protocol.payload.ParametersJson;
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.Matchers.*;

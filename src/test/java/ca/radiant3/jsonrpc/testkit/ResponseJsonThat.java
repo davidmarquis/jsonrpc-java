@@ -1,8 +1,8 @@
 package ca.radiant3.jsonrpc.testkit;
 
 import ca.radiant3.jsonrpc.Value;
-import ca.radiant3.jsonrpc.json.ErrorJson;
-import ca.radiant3.jsonrpc.json.ResponseJson;
+import ca.radiant3.jsonrpc.protocol.payload.ErrorJson;
+import ca.radiant3.jsonrpc.protocol.payload.ResponseJson;
 import org.hamcrest.Matcher;
 
 import java.io.Serializable;

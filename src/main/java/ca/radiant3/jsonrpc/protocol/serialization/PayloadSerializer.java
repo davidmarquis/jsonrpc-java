@@ -1,7 +1,7 @@
 package ca.radiant3.jsonrpc.protocol.serialization;
 
-import ca.radiant3.jsonrpc.json.InvocationJson;
-import ca.radiant3.jsonrpc.json.ResponseJson;
+import ca.radiant3.jsonrpc.protocol.payload.InvocationJson;
+import ca.radiant3.jsonrpc.protocol.payload.ResponseJson;
 
 import java.io.IOException;
 import java.io.InputStream;

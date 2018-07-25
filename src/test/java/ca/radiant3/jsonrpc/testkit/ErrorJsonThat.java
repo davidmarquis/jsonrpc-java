@@ -1,6 +1,6 @@
 package ca.radiant3.jsonrpc.testkit;
 
-import ca.radiant3.jsonrpc.json.ErrorJson;
+import ca.radiant3.jsonrpc.protocol.payload.ErrorJson;
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.Matchers.*;

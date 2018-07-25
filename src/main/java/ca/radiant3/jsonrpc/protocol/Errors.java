@@ -1,6 +1,6 @@
 package ca.radiant3.jsonrpc.protocol;
 
-import ca.radiant3.jsonrpc.json.ErrorJson;
+import ca.radiant3.jsonrpc.protocol.payload.ErrorJson;
 
 public class Errors {
     public static ErrorJson methodNotFound() {

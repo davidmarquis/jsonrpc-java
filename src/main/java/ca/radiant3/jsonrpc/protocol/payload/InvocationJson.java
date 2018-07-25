@@ -1,4 +1,4 @@
-package ca.radiant3.jsonrpc.json;
+package ca.radiant3.jsonrpc.protocol.payload;
 
 import ca.radiant3.jsonrpc.Invocation;
 import ca.radiant3.jsonrpc.Value;

@@ -1,8 +1,8 @@
 package ca.radiant3.jsonrpc.transport.http.client;
 
 import ca.radiant3.jsonrpc.client.RemoteRpcService;
-import ca.radiant3.jsonrpc.json.InvocationJson;
-import ca.radiant3.jsonrpc.json.ResponseJson;
+import ca.radiant3.jsonrpc.protocol.payload.InvocationJson;
+import ca.radiant3.jsonrpc.protocol.payload.ResponseJson;
 import ca.radiant3.jsonrpc.protocol.serialization.PayloadSerializer;
 import ca.radiant3.jsonrpc.protocol.serialization.gson.GsonPayloadSerializer;
 import org.apache.http.HttpEntity;

@@ -1,14 +1,14 @@
 package ca.radiant3.jsonrpc.protocol.serialization;
 
 import ca.radiant3.jsonrpc.Value;
-import ca.radiant3.jsonrpc.json.InvocationJson;
-import ca.radiant3.jsonrpc.json.ParametersJson;
+import ca.radiant3.jsonrpc.protocol.payload.InvocationJson;
+import ca.radiant3.jsonrpc.protocol.payload.ParametersJson;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static ca.radiant3.jsonrpc.json.ParametersJson.named;
+import static ca.radiant3.jsonrpc.protocol.payload.ParametersJson.named;
 import static org.junit.Assert.assertThat;
 import static uk.co.datumedge.hamcrest.json.SameJSONAs.sameJSONAs;
 

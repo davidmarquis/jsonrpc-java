@@ -2,7 +2,7 @@ package ca.radiant3.jsonrpc.client;
 
 import ca.radiant3.jsonrpc.Invocation;
 import ca.radiant3.jsonrpc.Signature;
-import ca.radiant3.jsonrpc.json.InvocationJson;
+import ca.radiant3.jsonrpc.protocol.payload.InvocationJson;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

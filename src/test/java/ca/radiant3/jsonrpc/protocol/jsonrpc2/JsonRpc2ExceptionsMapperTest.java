@@ -1,7 +1,7 @@
 package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
-import ca.radiant3.jsonrpc.json.ErrorJson;
 import ca.radiant3.jsonrpc.protocol.InvalidProtocolVersion;
+import ca.radiant3.jsonrpc.protocol.payload.ErrorJson;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;

@@ -1,9 +1,9 @@
 package ca.radiant3.jsonrpc.protocol.jsonrpc2;
 
-import ca.radiant3.jsonrpc.json.ErrorJson;
 import ca.radiant3.jsonrpc.protocol.Errors;
 import ca.radiant3.jsonrpc.protocol.ExceptionMapper;
 import ca.radiant3.jsonrpc.protocol.InvalidProtocolVersion;
+import ca.radiant3.jsonrpc.protocol.payload.ErrorJson;
 
 public class JsonRpc2ExceptionsMapper implements ExceptionMapper {
     @Override
