@@ -4,6 +4,7 @@ import ca.radiant3.jsonrpc.Value;
 import ca.radiant3.jsonrpc.protocol.serialization.gson.JsonElementValue;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import org.hamcrest.Matcher;
 import org.junit.Test;
@@ -16,6 +17,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static ca.radiant3.jsonrpc.protocol.serialization.JsonElementValueTest.ValueAssertions.valueOf;
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -23,184 +26,237 @@ import static org.junit.Assert.*;
 public class JsonElementValueTest {
     private static Gson gson = new Gson();
 
-    public static class OfCharacterSizedInteger {
-        JsonElementValue value = new JsonElementValue(gson, new JsonPrimitive(5));
+    public static class OfBoolean {
+        JsonElement aBoolean = new JsonPrimitive(true);
 
         @Test
         public void conversions() {
-            readsAs(value, List.of(Character.class, char.class), is('5'));
-            readsAs(value, List.of(Short.class, short.class), is((short) 5));
-            readsAs(value, List.of(Integer.class, int.class), is(5));
-            readsAs(value, List.of(Long.class, long.class), is((long) 5));
-            readsAs(value, List.of(Float.class, float.class), is(5f));
-            readsAs(value, List.of(Double.class, double.class), is(5d));
-            readsAs(value, List.of(String.class), is("5"));
+            valueOf(aBoolean).whenReadAs(Boolean.class, boolean.class, equalTo(true));
+            valueOf(aBoolean).whenReadAs(String.class, equalTo("true"));
+
+            valueOf(aBoolean).doesNotReadAs(
+                    Character.class, char.class,
+                    Short.class, short.class,
+                    Integer.class, int.class,
+                    Long.class, long.class,
+                    Float.class, float.class,
+                    Double.class, double.class
+            );
+        }
+    }
+
+    public static class OfSingleDigitInteger {
+        JsonElement singleDigitInteger = new JsonPrimitive(5);
+
+        @Test
+        public void conversions() {
+            valueOf(singleDigitInteger).whenReadAs(Character.class, char.class, equalTo('5'));
+            valueOf(singleDigitInteger).whenReadAs(Character.class, char.class, is('5'));
+            valueOf(singleDigitInteger).whenReadAs(Short.class, short.class, is((short) 5));
+            valueOf(singleDigitInteger).whenReadAs(Integer.class, int.class, is(5));
+            valueOf(singleDigitInteger).whenReadAs(Long.class, long.class, is((long) 5));
+            valueOf(singleDigitInteger).whenReadAs(Float.class, float.class, is(5f));
+            valueOf(singleDigitInteger).whenReadAs(Double.class, double.class, is(5d));
+            valueOf(singleDigitInteger).whenReadAs(String.class, is("5"));
+
+            valueOf(singleDigitInteger).doesNotReadAs(Boolean.class, boolean.class);
         }
     }
 
     public static class OfShortSizedInteger {
-        JsonElementValue value = new JsonElementValue(gson, new JsonPrimitive(123));
+        JsonElement smallInteger = new JsonPrimitive(123);
 
         @Test
         public void conversions() {
-            readsAs(value, List.of(Integer.class, int.class), is(123));
-            readsAs(value, List.of(Long.class, long.class), is((long) 123));
-            readsAs(value, List.of(Short.class, short.class), is((short) 123));
-            readsAs(value, List.of(Float.class, float.class), is(123f));
-            readsAs(value, List.of(Double.class, double.class), is(123d));
-            readsAs(value, List.of(String.class), is("123"));
+            valueOf(smallInteger).whenReadAs(Short.class, short.class, is((short) 123));
+            valueOf(smallInteger).whenReadAs(Integer.class, int.class, is(123));
+            valueOf(smallInteger).whenReadAs(Long.class, long.class, is((long) 123));
+            valueOf(smallInteger).whenReadAs(Float.class, float.class, is(123f));
+            valueOf(smallInteger).whenReadAs(Double.class, double.class, is(123d));
+            valueOf(smallInteger).whenReadAs(String.class, is("123"));
 
-            doesNotReadAs(value, List.of(Character.class, char.class));
+            valueOf(smallInteger).doesNotReadAs(
+                    Character.class, char.class,
+                    Boolean.class, boolean.class
+            );
         }
     }
 
     public static class OfLongSizedInteger {
-        JsonElementValue value = new JsonElementValue(gson, new JsonPrimitive(991882123));
+        JsonElement largeInteger = new JsonPrimitive(991882123);
 
         @Test
         public void conversions() {
-            readsAs(value, List.of(Short.class, short.class), is((short) -5237));  // overflows
-            readsAs(value, List.of(Integer.class, int.class), is(991882123));
-            readsAs(value, List.of(Long.class, long.class), is((long) 991882123));
-            readsAs(value, List.of(Float.class, float.class), is(991882123f));
-            readsAs(value, List.of(Double.class, double.class), is(991882123d));
-            readsAs(value, List.of(String.class), is("991882123"));
+            valueOf(largeInteger).whenReadAs(Short.class, short.class, is((short) -5237));  // overflows
+            valueOf(largeInteger).whenReadAs(Integer.class, int.class, is(991882123));
+            valueOf(largeInteger).whenReadAs(Long.class, long.class, is((long) 991882123));
+            valueOf(largeInteger).whenReadAs(Float.class, float.class, is(991882123f));
+            valueOf(largeInteger).whenReadAs(Double.class, double.class, is(991882123d));
+            valueOf(largeInteger).whenReadAs(String.class, is("991882123"));
 
-            doesNotReadAs(value, List.of(Character.class, char.class));
+            valueOf(largeInteger).doesNotReadAs(
+                    Character.class, char.class,
+                    Boolean.class, boolean.class
+            );
         }
     }
 
     @RunWith(Parameterized.class)
-    public static class OfDecimal {
+    public static class OfDecimals {
         private static final float FLOAT = 345.19f;
         private static final double DOUBLE = 345.19d;
 
         @Parameterized.Parameters
-        public static Collection<JsonElementValue> subjects() {
-            return Arrays.asList(
-                    new JsonElementValue(gson, new JsonPrimitive(FLOAT)),
-                    new JsonElementValue(gson, new JsonPrimitive(DOUBLE))
+        public static Collection<JsonElement> subjects() {
+            return asList(
+                    new JsonPrimitive(FLOAT),
+                    new JsonPrimitive(DOUBLE)
             );
         }
 
         @Parameterized.Parameter
-        public JsonElementValue value;
+        public JsonElement decimal;
 
         @Test
         public void conversions() {
-            readsAs(value, List.of(Short.class, short.class), is((short) 345));
-            readsAs(value, List.of(Integer.class, int.class), is(345));
-            readsAs(value, List.of(Long.class, long.class), is((long) 345));
-            readsAs(value, List.of(Float.class, float.class), is(345.19f));
-            readsAs(value, List.of(Double.class, double.class), allOf(
-                    greaterThanOrEqualTo(345.19d), lessThan(345.2d)
-            ));
-            readsAs(value, List.of(String.class), is("345.19"));
+            valueOf(decimal).whenReadAs(Short.class, short.class, is((short) 345));
+            valueOf(decimal).whenReadAs(Integer.class, int.class, is(345));
+            valueOf(decimal).whenReadAs(Long.class, long.class, is((long) 345));
+            valueOf(decimal).whenReadAs(Float.class, float.class, is(345.19f));
+            valueOf(decimal).whenReadAs(Double.class, double.class, closeTo(345.19d, 0.001d));
+            valueOf(decimal).whenReadAs(String.class, is("345.19"));
 
-            doesNotReadAs(value, List.of(Character.class, char.class));
+            valueOf(decimal).doesNotReadAs(
+                    Character.class, char.class,
+                    Boolean.class, boolean.class
+            );
+        }
+    }
+
+    public static class OfBooleanString {
+        JsonElement nonNumericString = new JsonPrimitive("true");
+
+        @Test
+        public void conversions() {
+            valueOf(nonNumericString).whenReadAs(Boolean.class, boolean.class, is(true));
+            valueOf(nonNumericString).whenReadAs(String.class, is("true"));
+
+            valueOf(nonNumericString).doesNotReadAs(
+                    Character.class, char.class,
+                    Short.class, short.class,
+                    Integer.class, int.class,
+                    Long.class, long.class,
+                    Float.class, float.class,
+                    Double.class, double.class
+            );
         }
     }
 
     public static class OfNonNumericString {
-        JsonElementValue value = new JsonElementValue(gson, new JsonPrimitive("abc"));
+        JsonElement nonNumericString = new JsonPrimitive("abc");
 
         @Test
         public void conversions() {
-            readsAs(value, List.of(String.class), is("abc"));
+            valueOf(nonNumericString).whenReadAs(Boolean.class, boolean.class, is(false));
+            valueOf(nonNumericString).whenReadAs(String.class, is("abc"));
 
-            doesNotReadAs(value, List.of(
+            valueOf(nonNumericString).doesNotReadAs(
                     Character.class, char.class,
                     Short.class, short.class,
                     Integer.class, int.class,
                     Long.class, long.class,
                     Float.class, float.class,
                     Double.class, double.class
-            ));
+            );
         }
     }
 
     public static class OfNumericDecimalString {
-        JsonElementValue value = new JsonElementValue(gson, new JsonPrimitive("199.19"));
+        JsonElement numericDecimalString = new JsonPrimitive("199.19");
 
         @Test
         public void conversions() {
-            readsAs(value, List.of(Float.class, float.class), is(199.19f));
-            readsAs(value, List.of(Double.class, double.class), allOf(
+            valueOf(numericDecimalString).whenReadAs(Boolean.class, boolean.class, is(false));
+            valueOf(numericDecimalString).whenReadAs(Float.class, float.class, is(199.19f));
+            valueOf(numericDecimalString).whenReadAs(Double.class, double.class, allOf(
                     greaterThanOrEqualTo(199.19d), lessThan(199.2d)
             ));
-            readsAs(value, List.of(String.class), is("199.19"));
+            valueOf(numericDecimalString).whenReadAs(String.class, is("199.19"));
 
-            doesNotReadAs(value, List.of(
+            valueOf(numericDecimalString).doesNotReadAs(
                     Character.class, char.class,
                     Short.class, short.class,
                     Integer.class, int.class,
                     Long.class, long.class
-            ));
+            );
         }
     }
 
     public static class OfNumericIntegerString {
-        JsonElementValue value = new JsonElementValue(gson, new JsonPrimitive("199"));
+        JsonElement numericIntegerString = new JsonPrimitive("199");
 
         @Test
         public void conversions() {
-            readsAs(value, List.of(Short.class, short.class), is((short) 199));
-            readsAs(value, List.of(Integer.class, int.class), is(199));
-            readsAs(value, List.of(Long.class, long.class), is((long) 199));
-            readsAs(value, List.of(Float.class, float.class), is(199f));
-            readsAs(value, List.of(Double.class, double.class), is(199d));
-            readsAs(value, List.of(String.class), is("199"));
+            valueOf(numericIntegerString).whenReadAs(Short.class, short.class, is((short) 199));
+            valueOf(numericIntegerString).whenReadAs(Integer.class, int.class, is(199));
+            valueOf(numericIntegerString).whenReadAs(Long.class, long.class, is((long) 199));
+            valueOf(numericIntegerString).whenReadAs(Float.class, float.class, is(199f));
+            valueOf(numericIntegerString).whenReadAs(Double.class, double.class, is(199d));
+            valueOf(numericIntegerString).whenReadAs(String.class, is("199"));
 
-            doesNotReadAs(value, List.of(Character.class, char.class));
+            valueOf(numericIntegerString).doesNotReadAs(
+                    Character.class, char.class
+            );
         }
     }
 
     public static class OfSingleCharacterString {
-        JsonElementValue value = new JsonElementValue(gson, new JsonPrimitive("a"));
+        JsonPrimitive singleCharacterString = new JsonPrimitive("a");
 
         @Test
         public void conversions() {
-            readsAs(value, List.of(Character.class, char.class), is('a'));
-            readsAs(value, List.of(String.class), is("a"));
+            valueOf(singleCharacterString).whenReadAs(Boolean.class, boolean.class, is(false));
+            valueOf(singleCharacterString).whenReadAs(Character.class, char.class, is('a'));
+            valueOf(singleCharacterString).whenReadAs(String.class, is("a"));
 
-            doesNotReadAs(value, List.of(
+            valueOf(singleCharacterString).doesNotReadAs(
                     Short.class, short.class,
                     Integer.class, int.class,
                     Long.class, long.class,
                     Float.class, float.class,
                     Double.class, double.class
-            ));
+            );
         }
     }
 
     public static class OfSingleNumericCharacterString {
-        JsonElementValue value = new JsonElementValue(gson, new JsonPrimitive("8"));
+        JsonElement singleDigitIntegerString = new JsonPrimitive("8");
 
         @Test
         public void conversions() {
-            readsAs(value, List.of(Short.class, short.class), is((short) 8));
-            readsAs(value, List.of(Integer.class, int.class), is(8));
-            readsAs(value, List.of(Long.class, long.class), is((long) 8));
-            readsAs(value, List.of(Float.class, float.class), is(8f));
-            readsAs(value, List.of(Double.class, double.class), is(8d));
-            readsAs(value, List.of(Character.class, char.class), is('8'));
-            readsAs(value, List.of(String.class), is("8"));
+            valueOf(singleDigitIntegerString).whenReadAs(Boolean.class, boolean.class, is(false));
+            valueOf(singleDigitIntegerString).whenReadAs(Short.class, short.class, is((short) 8));
+            valueOf(singleDigitIntegerString).whenReadAs(Integer.class, int.class, is(8));
+            valueOf(singleDigitIntegerString).whenReadAs(Long.class, long.class, is((long) 8));
+            valueOf(singleDigitIntegerString).whenReadAs(Float.class, float.class, is(8f));
+            valueOf(singleDigitIntegerString).whenReadAs(Double.class, double.class, is(8d));
+            valueOf(singleDigitIntegerString).whenReadAs(Character.class, char.class, is('8'));
+            valueOf(singleDigitIntegerString).whenReadAs(String.class, is("8"));
         }
     }
 
     public static class OfObject {
-        JsonElementValue value = new JsonElementValue(gson, gson.toJsonTree(
-                new DummyObject("some value", 123))
-        );
+        JsonElement object = gson.toJsonTree(new DummyObject("some value", 123));
 
         @Test
         public void conversions() {
-            readsAs(value, DummyObject.class, allOf(
+            valueOf(object).whenReadAs(DummyObject.class, allOf(
                     hasProperty("attribute1", is("some value")),
                     hasProperty("attribute2", is(123))
             ));
 
-            doesNotReadAs(value, List.of(
+            valueOf(object).doesNotReadAs(
+                    Boolean.class, boolean.class,
                     Short.class, short.class,
                     Integer.class, int.class,
                     Long.class, long.class,
@@ -208,7 +264,7 @@ public class JsonElementValueTest {
                     Double.class, double.class,
                     Character.class, char.class,
                     String.class
-            ));
+            );
         }
 
         public static class DummyObject {
@@ -231,18 +287,16 @@ public class JsonElementValueTest {
     }
 
     public static class OfIntegerArray {
-        JsonElementValue value = new JsonElementValue(gson, toJsonArray(new int[]{1, 2, 3, 4, 5}));
+        JsonElement arrayOfIntegers = toJsonArray(new int[]{1, 2, 3, 4, 5});
 
         @Test
         public void conversions() throws NoSuchMethodException {
-            readsAs(value, int[].class, is(new int[]{1, 2, 3, 4, 5}));
-            readsAs(value, Integer[].class, arrayContaining(1, 2, 3, 4, 5));
+            valueOf(arrayOfIntegers).whenReadAs(int[].class, is(new int[]{1, 2, 3, 4, 5}));
+            valueOf(arrayOfIntegers).whenReadAs(Integer[].class, arrayContaining(1, 2, 3, 4, 5));
+            valueOf(arrayOfIntegers).whenReadAsType(listOfIntegers(), is(List.of(1, 2, 3, 4, 5)));
 
-            Type listOfIntegers = listOfIntegers();
-            assertThat("Conversion to " + listOfIntegers, value.readAs(listOfIntegers), is(List.of(1, 2, 3, 4, 5)));
-            assertTrue("Should be compatible with " + listOfIntegers, value.isCompatibleWith(listOfIntegers));
-
-            doesNotReadAs(value, List.of(
+            valueOf(arrayOfIntegers).doesNotReadAs(
+                    Boolean.class, boolean.class,
                     Short.class, short.class,
                     Integer.class, int.class,
                     Long.class, long.class,
@@ -250,7 +304,7 @@ public class JsonElementValueTest {
                     Double.class, double.class,
                     Character.class, char.class,
                     String.class
-            ));
+            );
         }
 
         private static JsonArray toJsonArray(int[] value) {
@@ -268,21 +322,37 @@ public class JsonElementValueTest {
         }
     }
 
-    private static <T> void readsAs(Value value, List<Class<T>> types, Matcher<? super T> matches) {
-        for (Class<T> type : types) {
-            readsAs(value, type, matches);
+    static class ValueAssertions {
+        private Value subject;
+
+        private ValueAssertions(Value subject) {
+            this.subject = subject;
         }
-    }
 
-    @SuppressWarnings("unchecked")
-    private static <T> void readsAs(Value value, Class<T> type, Matcher<? super T> matches) {
-        assertThat("Conversion to " + type, (T) value.readAs(type), matches);
-        assertTrue("Should be compatible with " + type, value.isCompatibleWith(type));
-    }
+        public static ValueAssertions valueOf(JsonElement element) {
+            return new ValueAssertions(new JsonElementValue(gson, element));
+        }
 
-    private static void doesNotReadAs(Value value, List<Class<?>> types) {
-        for (Class<?> type : types) {
-            assertFalse("Should not be compatible with " + type, value.isCompatibleWith(type));
+        <T> void whenReadAs(Class<T> type1, Class<T> type2, Matcher<? super T> matches) {
+            for (Class<T> type : asList(type1, type2)) {
+                whenReadAs(type, matches);
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        <T> void whenReadAs(Class<T> type, Matcher<? super T> matches) {
+            whenReadAsType(type, (Matcher<? super Object>) matches);
+        }
+
+        void whenReadAsType(Type type, Matcher<? super Object> matches) {
+            assertThat("Conversion to " + type, subject.readAs(type), matches);
+            assertTrue("Should be compatible with " + type, subject.isCompatibleWith(type));
+        }
+
+        void doesNotReadAs(Class<?>... types) {
+            for (Class<?> type : types) {
+                assertFalse("Should not be compatible with " + type, subject.isCompatibleWith(type));
+            }
         }
     }
 }
