@@ -1,8 +1,7 @@
-package ca.radiant3.jsonrpc.transport.simpleframework;
+package ca.radiant3.jsonrpc.transport.http.server.simpleframework;
 
 import ca.radiant3.jsonrpc.RpcEndpoint;
 import ca.radiant3.jsonrpc.protocol.InvocationPayload;
-import ca.radiant3.jsonrpc.transport.RpcHttpServer;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.core.Container;
@@ -11,6 +10,7 @@ import org.simpleframework.transport.connect.SocketConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,7 +20,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleFrameworkHttpRpcServer implements RpcHttpServer {
+public class SimpleFrameworkHttpRpcServer implements Closeable {
     private static final Logger log = LoggerFactory.getLogger(SimpleFrameworkHttpRpcServer.class);
 
     private final int port;

@@ -1,5 +1,6 @@
-package ca.radiant3.jsonrpc.client;
+package ca.radiant3.jsonrpc.transport.http.client;
 
+import ca.radiant3.jsonrpc.client.RemoteRpcService;
 import ca.radiant3.jsonrpc.json.InvocationJson;
 import ca.radiant3.jsonrpc.json.ResponseJson;
 import ca.radiant3.jsonrpc.protocol.serialization.PayloadSerializer;
@@ -17,18 +18,18 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
-public class JsonRpcClient implements RemoteService, Closeable {
+public class HttpJsonRpcClient implements RemoteRpcService, Closeable {
     private final String url;
     private final PayloadSerializer serializer = new GsonPayloadSerializer();
     private final CloseableHttpClient client;
 
-    public JsonRpcClient(String url) {
+    public HttpJsonRpcClient(String url) {
         this.url = url;
         this.client = HttpClientBuilder.create().build();
     }
 
-    public static JsonRpcClient create(String endpointUrl) {
-        return new JsonRpcClient(endpointUrl);
+    public static HttpJsonRpcClient create(String endpointUrl) {
+        return new HttpJsonRpcClient(endpointUrl);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class JsonRpcClient implements RemoteService, Closeable {
     }
 
     @Override
-    public CompletableFuture<ResponseJson> invoke(InvocationJson invocation) throws IOException {
+    public CompletableFuture<ResponseJson> invoke(InvocationJson invocation) {
         return CompletableFuture.supplyAsync(() -> {
             HttpPost post = new HttpPost(url);
 

@@ -4,6 +4,5 @@ import ca.radiant3.jsonrpc.Invocation;
 import ca.radiant3.jsonrpc.Value;
 
 public interface InvocationHandler {
-
     Value handle(Invocation invocation) throws Exception;
 }

@@ -1,7 +1,6 @@
 package ca.radiant3.jsonrpc.client;
 
 import ca.radiant3.jsonrpc.Value;
-import ca.radiant3.jsonrpc.client.proxy.JsonRpcClientProxy;
 import ca.radiant3.jsonrpc.json.InvocationJson;
 import ca.radiant3.jsonrpc.json.ResponseJson;
 import org.junit.Test;
@@ -13,11 +12,11 @@ import static ca.radiant3.jsonrpc.testkit.InvocationJsonThat.hasSameState;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class JsonRpcClientProxyTest {
+public class HttpRpcClientProxyTest {
 
-    RemoteServiceFake remoteServiceFake = new RemoteServiceFake();
+    RemoteRpcServiceFake remoteServiceFake = new RemoteRpcServiceFake();
 
-    MyService proxy = JsonRpcClientProxy.createFor(MyService.class, remoteServiceFake);
+    MyService proxy = RpcClientProxy.createFor(MyService.class, remoteServiceFake);
 
     @Test
     public void generatesRemoteInvocation() {
@@ -30,7 +29,7 @@ public class JsonRpcClientProxyTest {
                                                                                 .withParameters(Value.of("test"), Value.of(123))));
     }
 
-    class RemoteServiceFake implements RemoteService {
+    class RemoteRpcServiceFake implements RemoteRpcService {
         ResponseJson response;
         InvocationJson lastInvocation;
 

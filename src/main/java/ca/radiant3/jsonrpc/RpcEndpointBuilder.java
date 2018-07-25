@@ -1,7 +1,8 @@
-package ca.radiant3.jsonrpc.server;
+package ca.radiant3.jsonrpc;
 
-import ca.radiant3.jsonrpc.RpcEndpoint;
 import ca.radiant3.jsonrpc.protocol.jsonrpc2.JsonRpc2Endpoint;
+import ca.radiant3.jsonrpc.server.InvocationHandler;
+import ca.radiant3.jsonrpc.server.InvokeByReflection;
 
 public class RpcEndpointBuilder {
 

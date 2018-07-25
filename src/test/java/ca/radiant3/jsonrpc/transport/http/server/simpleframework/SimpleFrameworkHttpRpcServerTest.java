@@ -1,8 +1,8 @@
-package ca.radiant3.jsonrpc.transport.simpleframework;
+package ca.radiant3.jsonrpc.transport.http.server.simpleframework;
 
-import ca.radiant3.jsonrpc.client.JsonRpcClient;
-import ca.radiant3.jsonrpc.client.proxy.JsonRpcClientProxy;
-import ca.radiant3.jsonrpc.server.RpcEndpointBuilder;
+import ca.radiant3.jsonrpc.RpcEndpointBuilder;
+import ca.radiant3.jsonrpc.client.RpcClientProxy;
+import ca.radiant3.jsonrpc.transport.http.client.HttpJsonRpcClient;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 
 public class SimpleFrameworkHttpRpcServerTest {
     SimpleFrameworkHttpRpcServer server = new SimpleFrameworkHttpRpcServer(8777);
-    MyService client = JsonRpcClientProxy.createFor(MyService.class, JsonRpcClient.create("http://localhost:8777/echo.json"));
+    MyService client = RpcClientProxy.createFor(MyService.class, HttpJsonRpcClient.create("http://localhost:8777/echo.json"));
 
     @Before
     public void startServer() throws IOException {
